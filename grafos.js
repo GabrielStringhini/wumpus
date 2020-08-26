@@ -86,16 +86,26 @@ class Grafo {
     }
 
     calculaAngulos(angulo, quantidade) {
-        const angulos = [];
-        if (quantidade % 2 == 1) {
-            angulos.push(angulo);
-            quantidade--;
-        }
-        for (let i = 1; i <= (parseInt(quantidade / 2)); i++) {
-            angulos.push(angulo + (angulo / quantidade) * i);
-            angulos.push(angulo - (angulo / quantidade) * i);
-        }
-        return angulos;
+      const angulos = [];
+      if (quantidade % 2 == 1) {
+          angulos.push(angulo);
+          quantidade--;
+      }
+      for (let i = 1; i <= (parseInt(quantidade / 2)); i++) {
+          angulos.push(angulo + 0.5 * i);
+          angulos.push(angulo - 0.5 * i);
+      }
+      return angulos;
+        // const angulos = [];
+        // if (quantidade % 2 == 1) {
+        //     angulos.push(angulo);
+        //     quantidade--;
+        // }
+        // for (let i = 1; i <= (parseInt(quantidade / 2)); i++) {
+        //     angulos.push(angulo + (angulo / quantidade) * i);
+        //     angulos.push(angulo - (angulo / quantidade) * i);
+        // }
+        // return angulos;
     }
 
     renderVertices() {
@@ -113,8 +123,8 @@ class Grafo {
                         id: aresta.id,
                         custo: aresta.custo,
                         desenhada: aresta.desenhada,
-                        origem: this._vertices[nomeOrigem], 
-                        destino: this._vertices[nomeDestino] 
+                        origem: this._vertices[nomeOrigem],
+                        destino: this._vertices[nomeDestino]
                     };
                     this.renderAresta(a);
                 });
@@ -144,8 +154,6 @@ class Grafo {
 
         const diferencaX = Math.abs(aresta.destino.x - aresta.origem.x);
         const diferencaY = Math.abs(aresta.destino.y - aresta.origem.y);
-        // const diferencaX = Math.abs(1);
-        // const diferencaY = Math.abs(1);
         let anguloOrigem = Math.atan(diferencaY / diferencaX);
         let anguloDestino = Math.atan(diferencaX / diferencaY);
 
@@ -192,7 +200,7 @@ class Grafo {
         // Marca que a aresta já foi desenhada.
         this._grafo[aresta.origem.nome][aresta.destino.nome].map((a, i) => {
             if (a.id == aresta.id) this._grafo[aresta.origem.nome][aresta.destino.nome][i].desenhada = true;
-        }); 
+        });
     }
 
     limparVertices() {
@@ -215,15 +223,17 @@ class Grafo {
 const grafo = new Grafo('camada1', 'camada2');
 // X e Y da origem > destino
 grafo.adicionarVertice({ nome: 'A', x: 100, y: 80 });
-grafo.adicionarVertice({ nome: 'B', x: 300, y: 300 });
-// grafo.adicionarVertice({ nome: 'C', x: 50, y: 50 });
+grafo.adicionarVertice({ nome: 'B', x: 300, y: 80 });
+grafo.adicionarVertice({ nome: 'C', x: 150, y: 150 });
+grafo.adicionarVertice({ nome: 'D', x: 110, y: 300 });
+
 grafo.renderVertices();
 grafo.adicionarAresta('A', 'B', 100);
 grafo.adicionarAresta('A', 'B', 20);
 grafo.adicionarAresta('A', 'B', 10);
+grafo.adicionarAresta('B', 'C', 10);
+grafo.adicionarAresta('A', 'C', 30);
+grafo.adicionarAresta('B', 'D', 30);
 
-// grafo.adicionarAresta('A', 'C', 100);
-// grafo.adicionarAresta('C', 'B', 100);
-// grafo.adicionarAresta('B', 'A', 100);
 grafo.renderArestas();
 console.log('grafo', grafo);
