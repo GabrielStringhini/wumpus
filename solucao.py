@@ -1,6 +1,6 @@
 import string
 
-import grafo2 as grafo
+import grafo
 import wumpus
 
 class Solucao:
@@ -23,7 +23,7 @@ class Solucao:
                 if 0 < x <= jogo.tamanho - 1:
                     casa_anterior = jogo.casa(x - 1 , y)
                     g.add_aresta((matriz[x][y], matriz[x-1][y], self._calcula_custo(casa_atual, casa_anterior)))
-                    # g.add_aresta((matriz[x-1][y], matriz[x][y], self._calcula_custo(casa_anterior, casa_atual)))   
+                    # g.add_aresta((matriz[x-1][y], matriz[x][y], self._calcula_custo(casa_anterior, casa_atual)))
 
                 if 0 <= y < jogo.tamanho - 1:
                     casa_direita = jogo.casa(x, y + 1)

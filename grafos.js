@@ -55,14 +55,14 @@ class Grafo {
     }
 
     adicionarVertice(vertice) {
-        this._vertices[vertice.nome] = vertice;
+        this._vertices[vertice.nome] = {...vertice, ativo: false };
         this._grafo[vertice.nome] = {};
     }
 
-    adicionarAresta(origem, destino, custo) {
+    adicionarAresta(origem, destino, custo, direcionada, ativa) {
         if (!this._grafo[origem][destino]) this._grafo[origem][destino] = [];
         this._quantidadeArestas++;
-        this._grafo[origem][destino].push({ id:this._quantidadeArestas, custo: custo, desenhada: false });
+        this._grafo[origem][destino].push({ id:this._quantidadeArestas, custo: custo, direcionada: direcionada, desenhada: false, ativa: ativa ?? false });
     }
 
     vertice(id, atributo, valor) {
@@ -96,22 +96,24 @@ class Grafo {
           angulos.push(angulo - 0.5 * i);
       }
       return angulos;
-        // const angulos = [];
-        // if (quantidade % 2 == 1) {
-        //     angulos.push(angulo);
-        //     quantidade--;
-        // }
-        // for (let i = 1; i <= (parseInt(quantidade / 2)); i++) {
-        //     angulos.push(angulo + (angulo / quantidade) * i);
-        //     angulos.push(angulo - (angulo / quantidade) * i);
-        // }
-        // return angulos;
     }
 
     renderVertices() {
         Object.entries(this._vertices).map(([id, vertice]) => {
             this.renderVertice(vertice);
         });
+    }
+
+    ativarVertice(vertice) {
+      this._vertices[vertice].ativo = true;
+    }
+
+    ativarVertices(vertices) {
+      this.limparVertices()
+      vertices.map(vertice => {
+        this.ativarVertice(vertice);
+      });
+      this.renderVertices();
     }
 
     renderArestas() {
@@ -122,6 +124,7 @@ class Grafo {
                     const a = {
                         id: aresta.id,
                         custo: aresta.custo,
+                        ativa: aresta.ativa,
                         desenhada: aresta.desenhada,
                         origem: this._vertices[nomeOrigem],
                         destino: this._vertices[nomeDestino]
@@ -136,9 +139,9 @@ class Grafo {
         this._ctxVertices.beginPath();
         this._ctxVertices.save();
         this._ctxVertices.lineWidth = 2;
-        this._ctxVertices.strokeStyle = vertice.ativado ? corAtivo : cor;
+        this._ctxVertices.strokeStyle = vertice.ativo ? corAtivo : cor;
         this._ctxVertices.font = "30px Arial";
-        this._ctxVertices.fillStyle = vertice.ativado ? corAtivo : cor;
+        this._ctxVertices.fillStyle = vertice.ativo ? corAtivo : cor;
         this._ctxVertices.arc(vertice.x, vertice.y, vertice.raio ?? raio, 0, Math.PI * 2, false);
         this._ctxVertices.stroke();
         this._ctxVertices.fillText(vertice.nome, vertice.x - 10, vertice.y + 10);
@@ -149,6 +152,7 @@ class Grafo {
     renderAresta(aresta) {
         this._ctxArestas.beginPath();
         this._ctxArestas.save();
+        this._ctxArestas.strokeStyle = aresta.ativa ? corAtivo : cor;
         // Quantidade de arestas entre os dois vertices;
         const { quantidade, desenhadas } = this.arestasEntre(aresta.origem.nome, aresta.destino.nome);
 
@@ -228,12 +232,14 @@ grafo.adicionarVertice({ nome: 'C', x: 150, y: 150 });
 grafo.adicionarVertice({ nome: 'D', x: 110, y: 300 });
 
 grafo.renderVertices();
-grafo.adicionarAresta('A', 'B', 100);
-grafo.adicionarAresta('A', 'B', 20);
-grafo.adicionarAresta('A', 'B', 10);
-grafo.adicionarAresta('B', 'C', 10);
-grafo.adicionarAresta('A', 'C', 30);
-grafo.adicionarAresta('B', 'D', 30);
+grafo.adicionarAresta('A', 'B', 100, true, true);
+grafo.adicionarAresta('A', 'B', 20, true);
+grafo.adicionarAresta('A', 'B', 10, true);
+grafo.adicionarAresta('B', 'C', 10, true);
+grafo.adicionarAresta('A', 'C', 30, true);
+grafo.adicionarAresta('B', 'D', 30, true, true);
+grafo.adicionarAresta('A', 'D', 30, true, true);
 
 grafo.renderArestas();
+grafo.ativarVertices(['A', 'B']);
 console.log('grafo', grafo);

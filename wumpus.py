@@ -54,10 +54,10 @@ class Wumpus:
         wumpus.tabuleiro = tabuleiro
         return wumpus
 
-        
+
     def posiciona_cacador(self, x, y):
         """Coloca o caçador na posição especificada."""
-        self.tabuleiro[x][y] = self.tabuleiro[x][y].replace(VAZIO, '') + CACADOR 
+        self.tabuleiro[x][y] = self.tabuleiro[x][y].replace(VAZIO, '') + CACADOR
 
     def posiciona_wumpus(self, x, y):
         """Coloca o wumpus na posição especificada."""
@@ -83,7 +83,7 @@ class Wumpus:
         """Coloca um fedor na posição especificada."""
         self.tabuleiro[x][y] = self.tabuleiro[x][y].replace(VAZIO, '') + FEDOR
         self.quantidade_fedor += 1
-    
+
     def casa(self, x, y):
         """Retorna o que está na casa na posição especificada."""
         return self.tabuleiro[x][y]
@@ -109,7 +109,7 @@ class Wumpus:
                 if self.tabuleiro[x][y] == WUMPUS:
                     casas_com_wumpus.append((x, y))
         return casas_com_wumpus
-    
+
     def inicializa_tabuleiro(self, cavernas, brisas, fedores, wumpus=1, ouros=1):
         """Posiciona o ambiente aleatoriamente, recebe a quantidade de cada componente."""
         casas_livres = self.casas_livres()
@@ -141,26 +141,12 @@ class Wumpus:
             if y > 0:
                 casas_proximas.append((x, y - 1))
             if y < self.tamanho - 1:
-                casas_proximas.append((x, y + 1))    
+                casas_proximas.append((x, y + 1))
 
         for _ in range(fedores):
             x, y = casas_proximas.pop(random.randint(0, len(casas_proximas) - 1))
             self.posiciona_fedor(x, y)
 
-class Grafo:
-    def __init__(self, vertices):
-        self.grafo = {}
-        for vertice in vertices:
-            self.grafo[vertice] = {}
-
-    def adicionar_aresta(self, v1, v2, peso):
-        """Adiciona uma aresta com peso entre dois vertices."""
-        self.grafo[v1][v2] = peso
-
-    def menor_caminho(self, inicio, fim):
-        """Encontra menor caminho entre dois vertices."""
-        pass
-      
 if __name__ == '__main__':
     wumpus2 = Wumpus.cria_de_lista([
         ['o', 'b', 'g', 'o'],
@@ -169,7 +155,3 @@ if __name__ == '__main__':
         ['c', 'o', 'o', 'f'],
     ], 4)
     print(wumpus2)
-    g = Grafo(list('abcd'))
-    g.adicionar_aresta('a', 'b', 10)
-    g.adicionar_aresta('a', 'c', 11)
-    print(g.grafo)
