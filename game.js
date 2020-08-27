@@ -1,4 +1,6 @@
 $(document).ready(() => {
+    let posicaoCacador = { x: 0, y: 0};
+
     function montaTabuleiro(casas) {
       console.log('OK')
       const tabuleiro = $('#tabuleiro');
@@ -6,7 +8,6 @@ $(document).ready(() => {
         const linha = $('<tr/>').appendTo(tabuleiro);
         for (let y = 0; y < casas; y++) {
           const casa = $('<td/>').addClass([`casa-${x}-${y} casa`]);
-          const conteudo = $('<div/>').addClass('conteudo').appendTo(casa);
           casa.appendTo(linha);
         }
       }
@@ -15,31 +16,63 @@ $(document).ready(() => {
     function preencheTabuleiro(personagens) {
         Object.entries(personagens).map(([ personagem, propriedades ]) => {
           propriedades.map(({ x, y }) => {
-            $(`#tabuleiro .casa-${x}-${y}`).addClass([`personagem ${personagem}`]);
+            if (personagem == 'cacador') {
+              const cacador = $(`
+                <div class='personagem cacador' height='100%' width='100%'></div>
+              `);
+              $(`#tabuleiro .casa-${x}-${y}`).append(cacador);
+              posicaoCacador.x = x;
+              posicaoCacador.y = y;
+            }
+            else $(`#tabuleiro .casa-${x}-${y}`).addClass([`personagem ${personagem}`]);
           });
         });
     }
 
     function moveCacador(x, y) {
-      const cacador = $('#tabuleiro .personagem.cacador');
-      let posicao = cacador.attr('class').split(' ')[0].split('-');
-      posicao.shift();
-      posicao = {
-        x: parseInt(posicao[0]),
-        y: parseInt(posicao[1])
-      };
-      console.log('classes antes', cacador.attr('class'));
-      cacador.removeClass('personagem');
-      cacador.removeClass('cacador');
-      console.log('classes depois', cacador.attr('class'));
-      console.log(posicao);
-      // console.log(cacador);
+      $('.personagem.cacador').remove();
+      $(`#tabuleiro .casa-${x}-${y}`).append(`<div class='personagem cacador' height='100%' width='100%'></div>`);
+      posicaoCacador.x = x;
+      posicaoCacador.y = y;
     }
+
+    function seguirCaminho(caminho) {
+      caminho.map(({ x, y }, i) => {
+        setTimeout(() => {
+          moveCacador(x, y);
+        }, i * 1000);
+      });
+    }
+
+    // function teste() {
+    //   const ouro = $('.casa-0-2.casa.personagem.ouro');
+    //   const content = $('<div/>').attr({width: '100%', height: '100%'});
+    //   content.addClass(['personagem', 'cacador']);
+    //   // content.css('background-color', 'red');
+    //   content.css('border-width', 1);
+    //   content.css('border-style', 'solid');
+    //   content.css('border-color', 'black');
+    //   content.css('position', 'relative');
+    //   ouro.append(content);
+    //   console.log('ouro', ouro);
+    // }
 
     montaTabuleiro(10);
     preencheTabuleiro({
-      cheiro: [{x: 2, y: 2}],
-      cacador: [{x: 1, y: 2}, {x: 2, y: 2}],
+      cheiro: [{x: 1, y: 3}, {x: 3, y: 3}],
+      cacador: [{x: 3, y: 0}],
+      wumpus: [{x: 2, y: 3}],
+      brisa: [{x: 0, y: 1}, {x: 2, y: 1}],
+      caverna: [{x: 1, y: 1}, {x: 1, y: 2}],
+      ouro: [{x: 0, y: 2}]
     });
-    // moveCacador(4, 4);
+    moveCacador(0, 2)
+    // seguirCaminho([
+    //   {x: 2, y: 0},
+    //   {x: 1, y: 0},
+    //   {x: 0, y: 0},
+    //   {x: 0, y: 1},
+    //   {x: 0, y: 2},
+    // ]);
+    // teste();
 });
