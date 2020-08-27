@@ -263,3 +263,30 @@ console.log('grafo', grafo);
 
 const g = grafo.criaGrafoMatriz(["A", "B", "C", "D", "E", "F", "G", "H", "I"], 3);
 g.renderVertices();
+g.adicionarAresta('A', 'B', 1);
+g.adicionarAresta('B', 'A', 2);
+// g.adicionarAresta('B', 'C', 3);
+// g.adicionarAresta('C', 'B', 4);
+// g.adicionarAresta('A', 'D', 5);
+// g.adicionarAresta('D', 'A', 6);
+// g.adicionarAresta('D', 'E', 7);
+// g.adicionarAresta('E', 'D', 8);
+// g.adicionarAresta('E', 'F', 9);
+// g.adicionarAresta('F', 'E', 10);
+// g.adicionarAresta('F', 'I', 11);
+// g.adicionarAresta('I', 'F', 12);
+// g.adicionarAresta('I', 'H', 13);
+// g.adicionarAresta('H', 'I', 14);
+// g.adicionarAresta('G', 'H', 15);
+// g.adicionarAresta('H', 'G', 16);
+// g.adicionarAresta('D', 'G', 17);
+// g.adicionarAresta('G', 'D', 18);
+// g.adicionarAresta('C', 'F', 19);
+// g.adicionarAresta('F', 'C', 20);
+// g.adicionarAresta('B', 'E', 21);
+// g.adicionarAresta('E', 'B', 22);
+// g.adicionarAresta('E', 'H', 23);
+// g.adicionarAresta('H', 'E', 24);
+g.renderArestas();
+
+g.ativarVertices(['A', 'B', 'E'])
