@@ -13,25 +13,29 @@
 
 .wumpus {
   background-image: url('./icones/monster.svg');
-  /* mask: url('./icones/monster.svg'); */
 }
 
 .ouro {
   background-image: url('./icones/gold.svg');
-  /* mask: url('./icones/gold.svg'); */
 }
 
 .caverna {
   background-image: url('./icones/cave.svg');
-  /* mask: url('./icones/cave.svg'); */
 }
 
 .cheiro {
   background-image: url('./icones/odor.svg');
-  /* mask: url('./icones/odor.svg'); */
 }
 
 .brisa {
   background-image: url('./icones/wind.svg');
-  /* mask: url('./icones/wind.svg'); */
+}
+
+.casa {
+  width: 50px;
+  height: 50px;
+  background-color: #FFF;
+  border-style: solid;
+  border-width: 2px;
+  border-color: #000;
 }
