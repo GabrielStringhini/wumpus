@@ -36,6 +36,23 @@ class Grafo {
         }
     }
 
+    criaGrafoMatriz(vertices, tamanho) {
+      const altura = parseInt($(this._canvasVertices).attr('height'));
+      const largura = parseInt($(this._canvasVertices).attr('width'));
+      // Calcula de quanto será o espeçamento entre os vértices e suas margens com as bordas.
+      const espacamentoX = (largura - (tamanho * raio)) / (tamanho + 2);
+      const espacamentoY = (altura - (tamanho * raio)) / (tamanho + 2);
+      const grafo = new Grafo('camada1', 'camada2');
+      for (let l = 0; l < tamanho; l++) {
+        let parteVertices = vertices.slice((l * tamanho), (l * tamanho + tamanho));
+        for (let c = 0; c < tamanho; c++) {
+          let v = { nome: parteVertices[c], x: (espacamentoX * (c + 1)) + (raio * c), y: (espacamentoY * (l + 1)) + (raio * l) };
+          grafo.adicionarVertice(v);
+        }
+      }
+      return grafo;
+    }
+
     arestasEntre(origem, destino) {
         let quantidade = 0;
         let desenhadas = 0;
@@ -231,7 +248,7 @@ grafo.adicionarVertice({ nome: 'B', x: 300, y: 80 });
 grafo.adicionarVertice({ nome: 'C', x: 150, y: 150 });
 grafo.adicionarVertice({ nome: 'D', x: 110, y: 300 });
 
-grafo.renderVertices();
+// grafo.renderVertices();
 grafo.adicionarAresta('A', 'B', 100, true, true);
 grafo.adicionarAresta('A', 'B', 20, true);
 grafo.adicionarAresta('A', 'B', 10, true);
@@ -240,6 +257,9 @@ grafo.adicionarAresta('A', 'C', 30, true);
 grafo.adicionarAresta('B', 'D', 30, true, true);
 grafo.adicionarAresta('A', 'D', 30, true, true);
 
-grafo.renderArestas();
-grafo.ativarVertices(['A', 'B']);
+// grafo.renderArestas();
+// grafo.ativarVertices(['A', 'B']);
 console.log('grafo', grafo);
+
+const g = grafo.criaGrafoMatriz(["A", "B", "C", "D", "E", "F", "G", "H", "I"], 3);
+g.renderVertices();
