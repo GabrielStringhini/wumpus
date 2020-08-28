@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="game.css">
+    <title>Wumpus - Gabriel</title>
+  </head>
+  <body>
+    <div class="container-fluid mt-4">
+      <div class="row mb-2" style="margin-left: auto">
+        <div class="col-2">
+        </div>
+        <div class="col-2">
+          <div class="personagem wumpus"></div>
+        </div>
+        <div class="col-2">
+          <div class="personagem brisa"></div>
+        </div>
+        <div class="col-2">
+          <div class="personagem cheiro"></div>
+        </div>
+        <div class="col-2">
+          <div class="personagem caverna"></div>
+        </div>
+      </div>
+      <form class="GET" action="index.html" method="post">
+      <div class="row">
+        <div class="col-2">
+          <input type="number" name="tamanho-tabuleiro" placeholder="Quantidade de casas">
+        </div>
+        <div class="col-2">
+          <input type="number" name="qnt-wumpus" placeholder="Wumpus">
+        </div>
+        <div class="col-2">
+          <input type="number" name="qnt-brisa" placeholder="Brisa">
+        </div>
+        <div class="col-2">
+          <input type="number" name="qnt-fedor" placeholder="Fedor">
+        </div>
+        <div class="col-2">
+          <input type="number" name="qnt-caverna" placeholder="Caverna">
+        </div>
+        <div class="col-1">
+          <button type="button" class="btn btn-warning" name="button">Criar</button>
+        </div>
+        <div class="col-1">
+          <button type="button" class="btn btn-info" name="button">Solucionar</button>
+        </div>
+      </div>
+      </form>
+      <div class="row mt-5">
+        <div class="col-6">
+          <div style="position: relative;">
+              <canvas id="camada2" width="800" height="600" style="position: absolute; left: 0; top: 0; z-index: 0;"></canvas>
+              <canvas id="camada1" width="800" height="600" style="position: absolute; left: 0; top: 0; z-index: 1;"></canvas>
+          </div>
+        </div>
+        <div class="col-6">
+          <table id="tabuleiro"></table>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script
+src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs="
+crossorigin="anonymous"></script>
+  <script type="text/javascript" src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="game.js"></script>
+  <script src="grafos.js"></script>
+</html>

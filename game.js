@@ -1,4 +1,5 @@
 $(document).ready(() => {
+  console.log('game.js')
     let posicaoCacador = { x: 0, y: 0};
 
     function montaTabuleiro(casas) {
@@ -44,20 +45,7 @@ $(document).ready(() => {
       });
     }
 
-    // function teste() {
-    //   const ouro = $('.casa-0-2.casa.personagem.ouro');
-    //   const content = $('<div/>').attr({width: '100%', height: '100%'});
-    //   content.addClass(['personagem', 'cacador']);
-    //   // content.css('background-color', 'red');
-    //   content.css('border-width', 1);
-    //   content.css('border-style', 'solid');
-    //   content.css('border-color', 'black');
-    //   content.css('position', 'relative');
-    //   ouro.append(content);
-    //   console.log('ouro', ouro);
-    // }
-
-    montaTabuleiro(10);
+    montaTabuleiro(4);
     preencheTabuleiro({
       cheiro: [{x: 1, y: 3}, {x: 3, y: 3}],
       cacador: [{x: 3, y: 0}],
@@ -66,7 +54,8 @@ $(document).ready(() => {
       caverna: [{x: 1, y: 1}, {x: 1, y: 2}],
       ouro: [{x: 0, y: 2}]
     });
-    moveCacador(0, 2)
+    // moveCacador(0, 2)
+
     // seguirCaminho([
     //   {x: 2, y: 0},
     //   {x: 1, y: 0},

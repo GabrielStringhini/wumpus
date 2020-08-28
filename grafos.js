@@ -1,6 +1,6 @@
 const cor = '#000000';
 const corAtivo = '#FF0000';
-const raio = 40;
+const raio = 30;
 const tamanhoFlecha = 15;
 
 class Grafo {
@@ -17,7 +17,7 @@ class Grafo {
         this._canvasVertices.onmousedown = (e) => {
             Object.entries(this._vertices).map(([id, vertice]) => {
                 const distancia = Math.sqrt((vertice.x - e.pageX) ** 2 + (vertice.y - e.pageY) ** 2);
-                if (distancia <= (vertice.raio ?? raio)) {
+                if (distancia + 15 <= (vertice.raio ?? raio)) {
                     this._arrastando = { id, vertice };
                     return;
                 }
@@ -36,9 +36,9 @@ class Grafo {
         }
     }
 
-    criaGrafoMatriz(vertices, tamanho) {
-      const altura = parseInt($(this._canvasVertices).attr('height'));
-      const largura = parseInt($(this._canvasVertices).attr('width'));
+    static criaGrafoMatriz(camada, vertices, tamanho) {
+      const altura = parseInt($(`#${camada}`).attr('height'));
+      const largura = parseInt($(`#${camada}`).attr('width'));
       // Calcula de quanto será o espeçamento entre os vértices e suas margens com as bordas.
       const espacamentoX = (largura - (tamanho * raio)) / (tamanho + 2);
       const espacamentoY = (altura - (tamanho * raio)) / (tamanho + 2);
@@ -134,6 +134,7 @@ class Grafo {
     }
 
     renderArestas() {
+      console.log('renderArestas');
         Object.keys(this._vertices).map(nomeOrigem => {
             const origem = this._grafo[nomeOrigem];
             Object.keys(origem).map(nomeDestino => {
@@ -175,6 +176,8 @@ class Grafo {
 
         const diferencaX = Math.abs(aresta.destino.x - aresta.origem.x);
         const diferencaY = Math.abs(aresta.destino.y - aresta.origem.y);
+        // let anguloOrigem = diferencaX ? Math.atan(diferencaY / diferencaX) : Math.atan(0);
+        // let anguloDestino = diferencaY ? Math.atan(diferencaX / diferencaY) : Math.atan(0);
         let anguloOrigem = Math.atan(diferencaY / diferencaX);
         let anguloDestino = Math.atan(diferencaX / diferencaY);
 
@@ -183,6 +186,9 @@ class Grafo {
 
         anguloOrigem = angulosOrigem[desenhadas];
         anguloDestino = angulosDestino[desenhadas];
+
+        // if (quantidade == 2 && desenhadas == 1) anguloOrigem = - anguloOrigem;
+        // if (quantidade == 2 && desenhadas == 1) anguloDestino = - anguloDestino;
 
         // Se diferencaX for negativa signica que o destino está à esquerda do origem.
         // Se diferencaY for negativa significa que o destino está acima do origem.
@@ -229,6 +235,7 @@ class Grafo {
     }
 
     limparArestas() {
+      console.log('limparArestas');
         this._ctxArestas.clearRect(0, 0, this._canvasArestas.width, this._canvasArestas.height);
         Object.keys(this._vertices).map(nomeOrigem => {
             const origem = this._grafo[nomeOrigem];
@@ -241,32 +248,36 @@ class Grafo {
     }
 }
 
-const grafo = new Grafo('camada1', 'camada2');
-// X e Y da origem > destino
-grafo.adicionarVertice({ nome: 'A', x: 100, y: 80 });
-grafo.adicionarVertice({ nome: 'B', x: 300, y: 80 });
-grafo.adicionarVertice({ nome: 'C', x: 150, y: 150 });
-grafo.adicionarVertice({ nome: 'D', x: 110, y: 300 });
-
+// const grafo = new Grafo('camada1', 'camada2');
+// grafo.adicionarVertice({ nome: 'A', x: 100, y: 80 });
+// grafo.adicionarVertice({ nome: 'B', x: 300, y: 80 });
+// grafo.adicionarVertice({ nome: 'C', x: 150, y: 150 });
+// grafo.adicionarVertice({ nome: 'D', x: 110, y: 300 });
+//
 // grafo.renderVertices();
-grafo.adicionarAresta('A', 'B', 100, true, true);
-grafo.adicionarAresta('A', 'B', 20, true);
-grafo.adicionarAresta('A', 'B', 10, true);
-grafo.adicionarAresta('B', 'C', 10, true);
-grafo.adicionarAresta('A', 'C', 30, true);
-grafo.adicionarAresta('B', 'D', 30, true, true);
-grafo.adicionarAresta('A', 'D', 30, true, true);
+// grafo.adicionarAresta('A', 'B', 100, true, true);
+// grafo.adicionarAresta('A', 'B', 20, true);
+// grafo.adicionarAresta('A', 'B', 10, true);
+// grafo.adicionarAresta('B', 'C', 10, true);
+// grafo.adicionarAresta('A', 'C', 30, true);
+// grafo.adicionarAresta('B', 'D', 30, true, true);
+// grafo.adicionarAresta('A', 'D', 30, true, true);
 
 // grafo.renderArestas();
 // grafo.ativarVertices(['A', 'B']);
-console.log('grafo', grafo);
+// console.log('grafo', grafo);
 
-const g = grafo.criaGrafoMatriz(["A", "B", "C", "D", "E", "F", "G", "H", "I"], 3);
+const g = Grafo.criaGrafoMatriz('camada1', ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P"], 4);
 g.renderVertices();
 g.adicionarAresta('A', 'B', 1);
 g.adicionarAresta('B', 'A', 2);
-// g.adicionarAresta('B', 'C', 3);
-// g.adicionarAresta('C', 'B', 4);
+g.adicionarAresta('B', 'C', 3);
+g.adicionarAresta('C', 'B', 4);
+g.adicionarAresta('F', 'E', 1);
+g.adicionarAresta('E', 'F', 2);
+g.adicionarAresta('C', 'D', 1);
+g.adicionarAresta('D', 'C', 1);
+
 // g.adicionarAresta('A', 'D', 5);
 // g.adicionarAresta('D', 'A', 6);
 // g.adicionarAresta('D', 'E', 7);
@@ -288,5 +299,5 @@ g.adicionarAresta('B', 'A', 2);
 // g.adicionarAresta('E', 'H', 23);
 // g.adicionarAresta('H', 'E', 24);
 g.renderArestas();
-
+//
 g.ativarVertices(['A', 'B', 'E'])
