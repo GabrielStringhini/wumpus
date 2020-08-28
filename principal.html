@@ -27,25 +27,25 @@
       <form class="GET" action="index.html" method="post">
       <div class="row">
         <div class="col-2">
-          <input type="number" name="tamanho-tabuleiro" placeholder="Quantidade de casas">
+          <input type="number" name="tamanho-tabuleiro" placeholder="Quantidade de casas" id="qnt-casas">
         </div>
         <div class="col-2">
-          <input type="number" name="qnt-wumpus" placeholder="Wumpus">
+          <input type="number" name="qnt-wumpus" placeholder="Wumpus" id="qnt-wumpus">
         </div>
         <div class="col-2">
-          <input type="number" name="qnt-brisa" placeholder="Brisa">
+          <input type="number" name="qnt-brisa" placeholder="Brisa" id="qnt-brisa">
         </div>
         <div class="col-2">
-          <input type="number" name="qnt-fedor" placeholder="Fedor">
+          <input type="number" name="qnt-fedor" placeholder="Fedor" id="qnt-fedor">
         </div>
         <div class="col-2">
-          <input type="number" name="qnt-caverna" placeholder="Caverna">
+          <input type="number" name="qnt-caverna" placeholder="Caverna" id="qnt-caverna">
         </div>
         <div class="col-1">
-          <button type="button" class="btn btn-warning" name="button">Criar</button>
+          <button type="button" class="btn btn-warning" name="button" id="btn-criar">Criar</button>
         </div>
         <div class="col-1">
-          <button type="button" class="btn btn-info" name="button">Solucionar</button>
+          <button type="button" class="btn btn-info" name="button" id="btn-solucionar">Solucionar</button>
         </div>
       </div>
       </form>
@@ -56,7 +56,7 @@
               <canvas id="camada1" width="800" height="600" style="position: absolute; left: 0; top: 0; z-index: 1;"></canvas>
           </div>
         </div>
-        <div class="col-6">
+        <div class="col-6 mt-5">
           <table id="tabuleiro"></table>
         </div>
       </div>
@@ -66,7 +66,32 @@
 src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
 integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs="
 crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script type="text/javascript" src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   <script type="text/javascript" src="game.js"></script>
   <script src="grafos.js"></script>
+  <script>
+    $(document).ready(() => {
+      $('#btn-criar').on('click', () => {
+        const casas = $('#qnt-casas').val();
+        const qntWumpus = $('#qnt-wumpus').val();
+        const qntBrisa = $('#qnt-brisa').val();
+        const qntFedor = $('#qnt-fedor').val();
+        const qntCaverna = $('#qnt-caverna').val();
+
+        console.log('casas', casas);
+        console.log('wumpus', qntWumpus);
+        console.log('brisa', qntBrisa);
+        console.log('fedor', qntFedor);
+        console.log('caverna', qntCaverna);
+
+        $.ajax({
+          url: 'https://api.jquery.com/jQuery.get/'
+        });
+      });
+      $('#btn-solucionar').on('click', () => {
+        alert('Solucionando');
+      });
+    });
+  </script>
 </html>
