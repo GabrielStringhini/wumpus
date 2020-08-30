@@ -72,25 +72,37 @@
 <script src="grafos.js"></script>
 <script>
   $(document).ready(() => {
+    let grafo;
     $('#btn-criar').on('click', () => {
       const casas = $('#qnt-casas').val();
       const qntWumpus = $('#qnt-wumpus').val();
       const qntBrisa = $('#qnt-brisa').val();
       const qntFedor = $('#qnt-fedor').val();
       const qntCaverna = $('#qnt-caverna').val();
+      grafo = Grafo.criaGrafoMatriz('camada1', Array.from(Array(parseInt(casas) ** 2).keys()), parseInt(casas));
+      grafo.renderVertices();
 
-      console.log('casas', casas);
-      console.log('wumpus', qntWumpus);
-      console.log('brisa', qntBrisa);
-      console.log('fedor', qntFedor);
-      console.log('caverna', qntCaverna);
-
+      // Monta tabuleiro no backend.
       $.ajax({
         url: 'http://localhost:5000/criar-tabuleiro?casas=4&wumpus=1&brisa=2&caverna=2&fedor=2',
         success: tabuleiro => {
           preencheTabuleiroArray(JSON.parse(tabuleiro));
+          // Monta grafo no backend.
+          $.ajax({
+            url: 'http://localhost:5000/criar-grafo',
+            success: grafoJson => {
+              grafoJson = JSON.parse(grafoJson);
+              Object.keys(grafoJson).map(verticeOrigem => {
+                Object.entries(grafoJson[verticeOrigem]).map(([verticeDestino, custo]) => {
+                  grafo.adicionarAresta(verticeOrigem, verticeDestino, parseInt(custo), true);
+                });
+              });
+              grafo.renderArestas();
+            }
+          });
         }
       });
+
     });
     $('#btn-solucionar').on('click', () => {
       $.ajax({
@@ -98,7 +110,10 @@
         success: caminho => {
           // Ativar vertices e arestas do caminho no grafo.
           // Fazer caçador percorrer o caminho.
-          console.log('caminho', caminho)
+          caminho = JSON.parse(caminho)
+          console.log('caminho', caminho);
+          console.log(Array.isArray(caminho));
+          grafo.ativarCaminho(caminho);
         }
       });
     });

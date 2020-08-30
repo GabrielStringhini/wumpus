@@ -145,6 +145,22 @@ class Grafo {
         this.renderVertices();
     }
 
+    ativarCaminho(caminho) {
+        this.limparVertices();
+        this.limparArestas();
+        caminho.map((vertice, i) => {
+            this.ativarVertice(vertice);
+            if (i < caminho.length - 1) {
+                const proximo = caminho[i+1];
+                for (let i = 0; i < this._grafo[vertice][proximo].length; i++) {
+                    this._grafo[vertice][proximo][i].ativa = true;
+                }
+            }
+        });
+        this.renderVertices();
+        this.renderArestas();
+    }
+
     renderArestas() {
         Object.keys(this._vertices).map(nomeOrigem => {
             const origem = this._grafo[nomeOrigem];
@@ -197,8 +213,6 @@ class Grafo {
         const anguloOrigem = angulosOrigem[desenhadas];
         const anguloDestino = angulosDestino[desenhadas];
 
-        // const comprimentoAresta = Math.sqrt((aresta.destino.y - aresta.origem.y) ** 2 + (aresta.destino.x - aresta.origem.x) ** 2);
-        // const meiaAresta = comprimentoAresta / 2;
         let xFlecha = 0;
         let yFlecha = 0;
         let anguloFlecha = 0;
@@ -274,10 +288,6 @@ class Grafo {
             }
         }
 
-        // const meiaAresta = Math.sqrt((chegadaY - saidaY) ** 2 + (chegadaX - saidaX) ** 2) / 2;
-        // const comprimentoAresta = Math.sqrt((chegadaY - saidaY) ** 2 + (chegadaX - saidaX) ** 2) / 2;
-        // const meiaAresta = comprimentoAresta / 2;
-
         this._ctxArestas.stroke();
         this._ctxArestas.restore();
         this._ctxArestas.closePath();
@@ -295,7 +305,9 @@ class Grafo {
 
     desenhaFlecha(flecha) {
         const altura = flecha.lado * Math.sqrt(3) / 2;
-        this._ctxArestas.strokeStyle = flecha.ativa ? corAtivo : cor;
+        this._ctxArestas.beginPath();
+        this._ctxArestas.save();
+        this._ctxArestas.fillStyle = flecha.ativa ? corAtivo : cor;
         this._ctxArestas.translate(flecha.x, flecha.y);
         this._ctxArestas.rotate(flecha.angulo);
         this._ctxArestas.translate(-flecha.x, -flecha.y);
@@ -306,6 +318,8 @@ class Grafo {
         this._ctxArestas.fill();
         this._ctxArestas.closePath();
         this._ctxArestas.setTransform(1, 0, 0, 1, 0, 0);
+        this._ctxArestas.restore();
+        this._ctxArestas.closePath();
     }
 
     limparVertices() {
@@ -344,57 +358,57 @@ class Grafo {
 // grafo.ativarVertices(['A', 'B']);
 // console.log('grafo', grafo);
 
-const g = Grafo.criaGrafoMatriz('camada1', ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P"], 4);
-g.renderVertices();
-g.adicionarAresta('A', 'B', 1);
-g.adicionarAresta('B', 'A', 2);
-g.adicionarAresta('A', 'E', 1);
-g.adicionarAresta('E', 'A', 2);
-g.adicionarAresta('B', 'C', 3);
-g.adicionarAresta('C', 'B', 4);
-g.adicionarAresta('F', 'E', 1);
-g.adicionarAresta('E', 'F', 2);
-g.adicionarAresta('C', 'D', 1);
-g.adicionarAresta('D', 'C', 1);
-g.adicionarAresta('B', 'F', 1);
-g.adicionarAresta('F', 'B', 1);
-g.adicionarAresta('F', 'G', 1);
-g.adicionarAresta('G', 'F', 1);
-g.adicionarAresta('G', 'H', 1);
-g.adicionarAresta('H', 'G', 1);
-g.adicionarAresta('C', 'G', 1);
-g.adicionarAresta('G', 'C', 1);
-g.adicionarAresta('H', 'D', 1);
-g.adicionarAresta('D', 'H', 1);
-g.adicionarAresta('E', 'I', 1);
-g.adicionarAresta('I', 'E', 1);
-g.adicionarAresta('I', 'J', 1);
-g.adicionarAresta('J', 'I', 1);
-g.adicionarAresta('F', 'J', 1);
-g.adicionarAresta('J', 'F', 1);
-g.adicionarAresta('J', 'K', 1);
-g.adicionarAresta('K', 'J', 1);
-g.adicionarAresta('G', 'K', 1);
-g.adicionarAresta('K', 'G', 1);
-g.adicionarAresta('K', 'L', 1);
-g.adicionarAresta('L', 'K', 1);
-g.adicionarAresta('H', 'L', 1);
-g.adicionarAresta('L', 'H', 1);
-g.adicionarAresta('I', 'M', 1);
-g.adicionarAresta('M', 'I', 1);
-g.adicionarAresta('J', 'N', 1);
-g.adicionarAresta('N', 'J', 1);
-g.adicionarAresta('M', 'N', 1);
-g.adicionarAresta('N', 'M', 1);
-g.adicionarAresta('N', 'O', 1);
-g.adicionarAresta('O', 'N', 1);
-g.adicionarAresta('K', 'O', 1);
-g.adicionarAresta('O', 'K', 1);
-g.adicionarAresta('O', 'P', 1);
-g.adicionarAresta('P', 'O', 1);
-g.adicionarAresta('P', 'L', 1);
-g.adicionarAresta('L', 'P', 1);
+// const g = Grafo.criaGrafoMatriz('camada1', ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P"], 4);
+// g.renderVertices();
+// g.adicionarAresta('A', 'B', 1);
+// g.adicionarAresta('B', 'A', 2);
+// g.adicionarAresta('A', 'E', 1);
+// g.adicionarAresta('E', 'A', 2);
+// g.adicionarAresta('B', 'C', 3);
+// g.adicionarAresta('C', 'B', 4);
+// g.adicionarAresta('F', 'E', 1);
+// g.adicionarAresta('E', 'F', 2);
+// g.adicionarAresta('C', 'D', 1);
+// g.adicionarAresta('D', 'C', 1);
+// g.adicionarAresta('B', 'F', 1);
+// g.adicionarAresta('F', 'B', 1);
+// g.adicionarAresta('F', 'G', 1);
+// g.adicionarAresta('G', 'F', 1);
+// g.adicionarAresta('G', 'H', 1);
+// g.adicionarAresta('H', 'G', 1);
+// g.adicionarAresta('C', 'G', 1);
+// g.adicionarAresta('G', 'C', 1);
+// g.adicionarAresta('H', 'D', 1);
+// g.adicionarAresta('D', 'H', 1);
+// g.adicionarAresta('E', 'I', 1);
+// g.adicionarAresta('I', 'E', 1);
+// g.adicionarAresta('I', 'J', 1);
+// g.adicionarAresta('J', 'I', 1);
+// g.adicionarAresta('F', 'J', 1);
+// g.adicionarAresta('J', 'F', 1);
+// g.adicionarAresta('J', 'K', 1);
+// g.adicionarAresta('K', 'J', 1);
+// g.adicionarAresta('G', 'K', 1);
+// g.adicionarAresta('K', 'G', 1);
+// g.adicionarAresta('K', 'L', 1);
+// g.adicionarAresta('L', 'K', 1);
+// g.adicionarAresta('H', 'L', 1);
+// g.adicionarAresta('L', 'H', 1);
+// g.adicionarAresta('I', 'M', 1);
+// g.adicionarAresta('M', 'I', 1);
+// g.adicionarAresta('J', 'N', 1);
+// g.adicionarAresta('N', 'J', 1);
+// g.adicionarAresta('M', 'N', 1);
+// g.adicionarAresta('N', 'M', 1);
+// g.adicionarAresta('N', 'O', 1);
+// g.adicionarAresta('O', 'N', 1);
+// g.adicionarAresta('K', 'O', 1);
+// g.adicionarAresta('O', 'K', 1);
+// g.adicionarAresta('O', 'P', 1);
+// g.adicionarAresta('P', 'O', 1);
+// g.adicionarAresta('P', 'L', 1);
+// g.adicionarAresta('L', 'P', 1);
 
-g.renderArestas();
+// g.renderArestas();
 
 // g.ativarVertices(['A', 'B', 'E'])

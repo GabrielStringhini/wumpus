@@ -9,11 +9,12 @@ class Solucao:
         self.vertice_ouro = None
 
     def tabuleiro_para_grafo(self, jogo):
-        letras = string.ascii_lowercase
-        g = grafo.Grafo(list(letras[:jogo.tamanho**2]))
+        # letras = string.ascii_lowercase
+        numeros = list(range(jogo.tamanho**2))
+        g = grafo.Grafo(list(numeros[:jogo.tamanho**2]))
         matriz = []
         for i in range(0, jogo.tamanho**2, jogo.tamanho):
-            matriz.append(letras[i:i + jogo.tamanho])
+            matriz.append(numeros[i:i + jogo.tamanho])
         for x in range(jogo.tamanho):
             for y in range(jogo.tamanho):
                 casa_atual = jogo.casa(x, y)
@@ -24,20 +25,18 @@ class Solucao:
                 if 0 <= x < jogo.tamanho - 1:
                     casa_proxima = jogo.casa(x + 1 , y)
                     g.add_aresta((matriz[x][y], matriz[x+1][y], self._calcula_custo(casa_atual, casa_proxima)))
-                    # g.add_aresta((matriz[x+1][y], matriz[x][y], self._calcula_custo(casa_proxima, casa_atual)))
+
                 if 0 < x <= jogo.tamanho - 1:
                     casa_anterior = jogo.casa(x - 1 , y)
                     g.add_aresta((matriz[x][y], matriz[x-1][y], self._calcula_custo(casa_atual, casa_anterior)))
-                    # g.add_aresta((matriz[x-1][y], matriz[x][y], self._calcula_custo(casa_anterior, casa_atual)))
 
                 if 0 <= y < jogo.tamanho - 1:
                     casa_direita = jogo.casa(x, y + 1)
                     g.add_aresta((matriz[x][y], matriz[x][y+1], self._calcula_custo(casa_atual, casa_direita)))
-                    # g.add_aresta((matriz[x][y+1], matriz[x][y], self._calcula_custo(casa_direita, casa_atual)))
+
                 if 0 < y <= jogo.tamanho - 1:
                     casa_esquerda = jogo.casa(x, y - 1)
                     g.add_aresta((matriz[x][y], matriz[x][y-1], self._calcula_custo(casa_atual, casa_esquerda)))
-                    # g.add_aresta((matriz[x][y-1], matriz[x][y], self._calcula_custo(casa_esquerda, casa_atual)))
         return g
 
     def _calcula_custo(self, casa1, casa2):

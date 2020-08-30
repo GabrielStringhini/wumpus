@@ -11,6 +11,9 @@ app = Flask(__name__)
 CORS(app)
 
 GAME = None
+GRAFO = None
+VERTICE_CACADOR = None
+VERTICE_OURO = None
 
 @app.route('/criar-tabuleiro')
 def criar_tabuleiro():
@@ -33,13 +36,28 @@ def criar_tabuleiro():
     GAME = game
     return json.dumps(game.tabuleiro)
 
+@app.route('/criar-grafo')
+def criar_grafo():
+    global GRAFO
+    global VERTICE_CACADOR
+    global VERTICE_OURO
+    sol = solucao.Solucao()
+    GRAFO = sol.tabuleiro_para_grafo(GAME)
+    VERTICE_CACADOR = sol.vertice_cacador
+    VERTICE_OURO = sol.vertice_ouro
+    return json.dumps(GRAFO._grafo)
+
 @app.route('/solucionar')
 def solucionar():
     print('solucionando')
-    print(GAME)
+    # print(GAME)
     incio = GAME.posicao_cacador
     fim = GAME.posicao_ouro
     sol = solucao.Solucao()
-    grafo = sol.tabuleiro_para_grafo(GAME)
-    caminho = grafo._menor_custo(sol.vertice_cacador, sol.vertice_ouro)
+    # grafo = sol.tabuleiro_para_grafo(GAME)
+    # print(json.dumps(grafo._grafo))
+    # caminho = grafo._menor_custo(sol.vertice_cacador, sol.vertice_ouro)
+    print('VERTICE_CACADOR', VERTICE_CACADOR)
+    print('VERTICE_OURO', VERTICE_OURO)
+    caminho = GRAFO._menor_custo(VERTICE_CACADOR, VERTICE_OURO)
     return json.dumps(caminho)
