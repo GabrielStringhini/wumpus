@@ -1,6 +1,6 @@
 const cor = '#000000';
 const corAtivo = '#FF0000';
-const raio = 30;
+const raio = 20;
 const tamanhoFlecha = 15;
 
 class Grafo {
@@ -47,20 +47,22 @@ class Grafo {
     }
 
     static criaGrafoMatriz(camada, vertices, tamanho) {
-      const altura = parseInt($(`#${camada}`).attr('height'));
-      const largura = parseInt($(`#${camada}`).attr('width'));
-      // Calcula de quanto será o espeçamento entre os vértices e suas margens com as bordas.
-      const espacamentoX = (largura - (tamanho * raio)) / (tamanho + 2);
-      const espacamentoY = (altura - (tamanho * raio)) / (tamanho + 2);
-      const grafo = new Grafo('camada1', 'camada2');
-      for (let l = 0; l < tamanho; l++) {
-        let parteVertices = vertices.slice((l * tamanho), (l * tamanho + tamanho));
-        for (let c = 0; c < tamanho; c++) {
-          let v = { nome: parteVertices[c], x: (espacamentoX * (c + 1)) + (raio * c), y: (espacamentoY * (l + 1)) + (raio * l) };
-          grafo.adicionarVertice(v);
+        //   const altura = parseInt($(`#${camada}`).prop('height'));
+        //   const largura = parseInt($(`#${camada}`).prop('width'));
+        const altura = 400;
+        const largura = 600;
+        // Calcula de quanto será o espeçamento entre os vértices e suas margens com as bordas.
+        const espacamentoX = (largura - (tamanho * raio)) / (tamanho + 2);
+        const espacamentoY = (altura - (tamanho * raio)) / (tamanho + 2);
+        const grafo = new Grafo('camada1', 'camada2');
+        for (let l = 0; l < tamanho; l++) {
+            let parteVertices = vertices.slice((l * tamanho), (l * tamanho + tamanho));
+            for (let c = 0; c < tamanho; c++) {
+                let v = { nome: parteVertices[c], x: (espacamentoX * (c + 1)) + (raio * c), y: (espacamentoY * (l + 1)) + (raio * l) };
+                grafo.adicionarVertice(v);
+            }
         }
-      }
-      return grafo;
+        return grafo;
     }
 
     arestasEntre(origem, destino) {
@@ -82,14 +84,14 @@ class Grafo {
     }
 
     adicionarVertice(vertice) {
-        this._vertices[vertice.nome] = {...vertice, ativo: false };
+        this._vertices[vertice.nome] = { ...vertice, ativo: false };
         this._grafo[vertice.nome] = {};
     }
 
     adicionarAresta(origem, destino, custo, direcionada, ativa) {
         if (!this._grafo[origem][destino]) this._grafo[origem][destino] = [];
         this._quantidadeArestas++;
-        this._grafo[origem][destino].push({ id:this._quantidadeArestas, custo: custo, direcionada: direcionada, desenhada: false, ativa: ativa ?? false });
+        this._grafo[origem][destino].push({ id: this._quantidadeArestas, custo: custo, direcionada: direcionada, desenhada: false, ativa: ativa ?? false });
     }
 
     vertice(id, atributo, valor) {
@@ -113,16 +115,16 @@ class Grafo {
     }
 
     calculaAngulos(angulo, quantidade) {
-      const angulos = [];
-      if (quantidade % 2 == 1) {
-          angulos.push(angulo);
-          quantidade--;
-      }
-      for (let i = 1; i <= (parseInt(quantidade / 2)); i++) {
-          angulos.push(angulo + 0.5 * i);
-          angulos.push(angulo - 0.5 * i);
-      }
-      return angulos;
+        const angulos = [];
+        if (quantidade % 2 == 1) {
+            angulos.push(angulo);
+            quantidade--;
+        }
+        for (let i = 1; i <= (parseInt(quantidade / 2)); i++) {
+            angulos.push(angulo + 0.5 * i);
+            angulos.push(angulo - 0.5 * i);
+        }
+        return angulos;
     }
 
     renderVertices() {
@@ -132,15 +134,15 @@ class Grafo {
     }
 
     ativarVertice(vertice) {
-      this._vertices[vertice].ativo = true;
+        this._vertices[vertice].ativo = true;
     }
 
     ativarVertices(vertices) {
-      this.limparVertices()
-      vertices.map(vertice => {
-        this.ativarVertice(vertice);
-      });
-      this.renderVertices();
+        this.limparVertices()
+        vertices.map(vertice => {
+            this.ativarVertice(vertice);
+        });
+        this.renderVertices();
     }
 
     renderArestas() {
@@ -224,8 +226,8 @@ class Grafo {
                 const saidaY = aresta.origem.y - origem.y;
                 const chegadaX = aresta.destino.x + destino.x;
                 const chegadaY = aresta.destino.y + destino.y;
-                const hipotenusa = Math.sqrt(Math.abs(chegadaY-saidaY)**2 + Math.abs(chegadaX-saidaX)**2);
-                const angulo = Math.atan((chegadaY-saidaY) / (chegadaX-saidaX));
+                const hipotenusa = Math.sqrt(Math.abs(chegadaY - saidaY) ** 2 + Math.abs(chegadaX - saidaX) ** 2);
+                const angulo = Math.atan((chegadaY - saidaY) / (chegadaX - saidaX));
                 xFlecha = saidaX - (Math.cos(angulo) * (hipotenusa / 2));
                 yFlecha = saidaY - (Math.sin(angulo) * (hipotenusa / 2));
                 this._ctxArestas.moveTo(saidaX, saidaY);
@@ -236,8 +238,8 @@ class Grafo {
                 const saidaY = aresta.origem.y + origem.y;
                 const chegadaX = aresta.destino.x + destino.x;
                 const chegadaY = aresta.destino.y - destino.y;
-                const hipotenusa = Math.sqrt(Math.abs(chegadaY-saidaY)**2 + Math.abs(chegadaX-saidaX)**2);
-                const angulo = Math.atan((chegadaY-saidaY) / (chegadaX-saidaX));
+                const hipotenusa = Math.sqrt(Math.abs(chegadaY - saidaY) ** 2 + Math.abs(chegadaX - saidaX) ** 2);
+                const angulo = Math.atan((chegadaY - saidaY) / (chegadaX - saidaX));
                 xFlecha = saidaX - (Math.cos(angulo) * (hipotenusa / 2));
                 yFlecha = saidaY - (Math.sin(angulo) * (hipotenusa / 2));
                 anguloFlecha = -90 * Math.PI / 180 - anguloOrigemOriginal;
@@ -250,8 +252,8 @@ class Grafo {
                 const saidaY = aresta.origem.y - origem.y;
                 const chegadaX = aresta.destino.x - destino.x;
                 const chegadaY = aresta.destino.y + destino.y;
-                const hipotenusa = Math.sqrt(Math.abs(chegadaY-saidaY)**2 + Math.abs(chegadaX-saidaX)**2);
-                const angulo = Math.atan((chegadaY-saidaY) / (chegadaX-saidaX));
+                const hipotenusa = Math.sqrt(Math.abs(chegadaY - saidaY) ** 2 + Math.abs(chegadaX - saidaX) ** 2);
+                const angulo = Math.atan((chegadaY - saidaY) / (chegadaX - saidaX));
                 xFlecha = saidaX + (Math.cos(angulo) * (hipotenusa / 2));
                 yFlecha = saidaY + (Math.sin(angulo) * (hipotenusa / 2));
                 this._ctxArestas.moveTo(saidaX, saidaY);
@@ -262,8 +264,8 @@ class Grafo {
                 const saidaY = aresta.origem.y + origem.y;
                 const chegadaX = aresta.destino.x - destino.x;
                 const chegadaY = aresta.destino.y - destino.y;
-                const hipotenusa = Math.sqrt(Math.abs(chegadaY-saidaY)**2 + Math.abs(chegadaX-saidaX)**2);
-                const angulo = Math.atan((chegadaY-saidaY) / (chegadaX-saidaX));
+                const hipotenusa = Math.sqrt(Math.abs(chegadaY - saidaY) ** 2 + Math.abs(chegadaX - saidaX) ** 2);
+                const angulo = Math.atan((chegadaY - saidaY) / (chegadaX - saidaX));
                 xFlecha = saidaX + (Math.cos(angulo) * (hipotenusa / 2));
                 yFlecha = saidaY + (Math.sin(angulo) * (hipotenusa / 2));
                 this._ctxArestas.moveTo(saidaX, saidaY);
@@ -279,9 +281,9 @@ class Grafo {
         this._ctxArestas.stroke();
         this._ctxArestas.restore();
         this._ctxArestas.closePath();
-        
+
         if (aresta.direcionada) {
-            const flecha = { x: xFlecha, y: yFlecha, lado: 15, angulo: anguloFlecha };
+            const flecha = { x: xFlecha, y: yFlecha, lado: 15, angulo: anguloFlecha, ativa: aresta.ativa };
             this.desenhaFlecha(flecha);
         }
 
@@ -293,6 +295,7 @@ class Grafo {
 
     desenhaFlecha(flecha) {
         const altura = flecha.lado * Math.sqrt(3) / 2;
+        this._ctxArestas.strokeStyle = flecha.ativa ? corAtivo : cor;
         this._ctxArestas.translate(flecha.x, flecha.y);
         this._ctxArestas.rotate(flecha.angulo);
         this._ctxArestas.translate(-flecha.x, -flecha.y);
@@ -300,8 +303,8 @@ class Grafo {
         this._ctxArestas.lineTo(flecha.x + flecha.lado / 2, flecha.y + altura / 2);
         this._ctxArestas.lineTo(flecha.x, flecha.y - altura / 2);
         this._ctxArestas.lineTo(flecha.x - flecha.lado / 2, flecha.y + altura / 2);
-        this._ctxArestas.closePath();
         this._ctxArestas.fill();
+        this._ctxArestas.closePath();
         this._ctxArestas.setTransform(1, 0, 0, 1, 0, 0);
     }
 
@@ -322,58 +325,76 @@ class Grafo {
     }
 }
 
-const grafo = new Grafo('camada1', 'camada2');
-grafo.adicionarVertice({ nome: 'A', x: 150, y: 150 });
-grafo.adicionarVertice({ nome: 'B', x: 300, y: 80 });
+// const grafo = new Grafo('camada1', 'camada2');
+// grafo.adicionarVertice({ nome: 'A', x: 150, y: 150 });
+// grafo.adicionarVertice({ nome: 'B', x: 300, y: 80 });
 // grafo.adicionarVertice({ nome: 'C', x: 150, y: 150 });
 // grafo.adicionarVertice({ nome: 'D', x: 110, y: 300 });
 //
-grafo.renderVertices();
-grafo.adicionarAresta('A', 'B', 100, true, true);
-grafo.adicionarAresta('A', 'B', 20, true);
+// grafo.renderVertices();
+// grafo.adicionarAresta('A', 'B', 100, true, true);
+// grafo.adicionarAresta('B', 'A', 20, true);
 // grafo.adicionarAresta('A', 'B', 10, true);
 // grafo.adicionarAresta('B', 'C', 10, true);
 // grafo.adicionarAresta('A', 'C', 30, true);
 // grafo.adicionarAresta('B', 'D', 30, true, true);
 // grafo.adicionarAresta('A', 'D', 30, true, true);
 
-grafo.renderArestas();
+// grafo.renderArestas();
 // grafo.ativarVertices(['A', 'B']);
 // console.log('grafo', grafo);
 
-// const g = Grafo.criaGrafoMatriz('camada1', ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P"], 4);
-// g.renderVertices();
-// g.adicionarAresta('A', 'B', 1);
-// g.adicionarAresta('B', 'A', 2);
-// g.adicionarAresta('A', 'E', 1);
-// g.adicionarAresta('E', 'A', 2);
-// g.adicionarAresta('B', 'C', 3);
-// g.adicionarAresta('C', 'B', 4);
-// g.adicionarAresta('F', 'E', 1);
-// g.adicionarAresta('E', 'F', 2);
-// g.adicionarAresta('C', 'D', 1);
-// g.adicionarAresta('D', 'C', 1);
+const g = Grafo.criaGrafoMatriz('camada1', ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P"], 4);
+g.renderVertices();
+g.adicionarAresta('A', 'B', 1);
+g.adicionarAresta('B', 'A', 2);
+g.adicionarAresta('A', 'E', 1);
+g.adicionarAresta('E', 'A', 2);
+g.adicionarAresta('B', 'C', 3);
+g.adicionarAresta('C', 'B', 4);
+g.adicionarAresta('F', 'E', 1);
+g.adicionarAresta('E', 'F', 2);
+g.adicionarAresta('C', 'D', 1);
+g.adicionarAresta('D', 'C', 1);
+g.adicionarAresta('B', 'F', 1);
+g.adicionarAresta('F', 'B', 1);
+g.adicionarAresta('F', 'G', 1);
+g.adicionarAresta('G', 'F', 1);
+g.adicionarAresta('G', 'H', 1);
+g.adicionarAresta('H', 'G', 1);
+g.adicionarAresta('C', 'G', 1);
+g.adicionarAresta('G', 'C', 1);
+g.adicionarAresta('H', 'D', 1);
+g.adicionarAresta('D', 'H', 1);
+g.adicionarAresta('E', 'I', 1);
+g.adicionarAresta('I', 'E', 1);
+g.adicionarAresta('I', 'J', 1);
+g.adicionarAresta('J', 'I', 1);
+g.adicionarAresta('F', 'J', 1);
+g.adicionarAresta('J', 'F', 1);
+g.adicionarAresta('J', 'K', 1);
+g.adicionarAresta('K', 'J', 1);
+g.adicionarAresta('G', 'K', 1);
+g.adicionarAresta('K', 'G', 1);
+g.adicionarAresta('K', 'L', 1);
+g.adicionarAresta('L', 'K', 1);
+g.adicionarAresta('H', 'L', 1);
+g.adicionarAresta('L', 'H', 1);
+g.adicionarAresta('I', 'M', 1);
+g.adicionarAresta('M', 'I', 1);
+g.adicionarAresta('J', 'N', 1);
+g.adicionarAresta('N', 'J', 1);
+g.adicionarAresta('M', 'N', 1);
+g.adicionarAresta('N', 'M', 1);
+g.adicionarAresta('N', 'O', 1);
+g.adicionarAresta('O', 'N', 1);
+g.adicionarAresta('K', 'O', 1);
+g.adicionarAresta('O', 'K', 1);
+g.adicionarAresta('O', 'P', 1);
+g.adicionarAresta('P', 'O', 1);
+g.adicionarAresta('P', 'L', 1);
+g.adicionarAresta('L', 'P', 1);
 
-// g.adicionarAresta('A', 'D', 5);
-// g.adicionarAresta('D', 'A', 6);
-// g.adicionarAresta('D', 'E', 7);
-// g.adicionarAresta('E', 'D', 8);
-// g.adicionarAresta('E', 'F', 9);
-// g.adicionarAresta('F', 'E', 10);
-// g.adicionarAresta('F', 'I', 11);
-// g.adicionarAresta('I', 'F', 12);
-// g.adicionarAresta('I', 'H', 13);
-// g.adicionarAresta('H', 'I', 14);
-// g.adicionarAresta('G', 'H', 15);
-// g.adicionarAresta('H', 'G', 16);
-// g.adicionarAresta('D', 'G', 17);
-// g.adicionarAresta('G', 'D', 18);
-// g.adicionarAresta('C', 'F', 19);
-// g.adicionarAresta('F', 'C', 20);
-// g.adicionarAresta('B', 'E', 21);
-// g.adicionarAresta('E', 'B', 22);
-// g.adicionarAresta('E', 'H', 23);
-// g.adicionarAresta('H', 'E', 24);
-// g.renderArestas();
+g.renderArestas();
 
 // g.ativarVertices(['A', 'B', 'E'])

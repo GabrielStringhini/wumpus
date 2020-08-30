@@ -5,7 +5,8 @@ import wumpus
 
 class Solucao:
     def __init__(self):
-        pass
+        self.vertice_cacador = None
+        self.vertice_ouro = None
 
     def tabuleiro_para_grafo(self, jogo):
         letras = string.ascii_lowercase
@@ -16,6 +17,10 @@ class Solucao:
         for x in range(jogo.tamanho):
             for y in range(jogo.tamanho):
                 casa_atual = jogo.casa(x, y)
+                if wumpus.CACADOR in casa_atual:
+                    self.vertice_cacador = matriz[x][y]
+                if wumpus.OURO in casa_atual:
+                    self.vertice_ouro = matriz[x][y]
                 if 0 <= x < jogo.tamanho - 1:
                     casa_proxima = jogo.casa(x + 1 , y)
                     g.add_aresta((matriz[x][y], matriz[x+1][y], self._calcula_custo(casa_atual, casa_proxima)))

@@ -31,9 +31,9 @@ class Wumpus:
             self.x_inicio, self.y_inicio = inicio
         else:
             self.x_inicio, self.y_inicio = random.randint(0, tamanho-1), random.randint(0, tamanho-1)
-            self.tamanho = tamanho
-            self.tabuleiro = [[VAZIO] * tamanho for _ in range(tamanho)]
-            self.posiciona_cacador(self.x_inicio, self.y_inicio)
+        self.tamanho = tamanho
+        self.tabuleiro = [[VAZIO] * tamanho for _ in range(tamanho)]
+        self.posiciona_cacador(self.x_inicio, self.y_inicio)
 
     def __str__(self):
         """Mostra tabuleiro formatado como tabela."""
@@ -54,10 +54,10 @@ class Wumpus:
         wumpus.tabuleiro = tabuleiro
         return wumpus
 
-
     def posiciona_cacador(self, x, y):
         """Coloca o caçador na posição especificada."""
         self.tabuleiro[x][y] = self.tabuleiro[x][y].replace(VAZIO, '') + CACADOR
+        self.posicao_cacador = (x, y)
 
     def posiciona_wumpus(self, x, y):
         """Coloca o wumpus na posição especificada."""
@@ -68,6 +68,7 @@ class Wumpus:
         """Coloca um ouro na posição especificada."""
         self.tabuleiro[x][y] = self.tabuleiro[x][y].replace(VAZIO, '') + OURO
         self.quantidade_ouro += 1
+        self.posicao_ouro = (x, y)
 
     def posiciona_caverna(self, x, y):
         """Coloca uma caverna na posição especificada."""
@@ -125,7 +126,7 @@ class Wumpus:
         for _ in range(wumpus):
             x, y = casas_livres.pop(random.randint(0,len(casas_livres) - 1))
             self.posiciona_wumpus(x, y)
-        # Coloca todas os ouros no tabuleiro.
+        # Coloca todos os ouros no tabuleiro.
         for _ in range(ouros):
             x, y = casas_livres.pop(random.randint(0, len(casas_livres) - 1))
             self.posiciona_ouro(x, y)
@@ -154,4 +155,5 @@ if __name__ == '__main__':
         ['o', 'b', 'o', 'w'],
         ['c', 'o', 'o', 'f'],
     ], 4)
-    print(wumpus2)
+    import json
+    print(json.dumps(wumpus2.tabuleiro))
