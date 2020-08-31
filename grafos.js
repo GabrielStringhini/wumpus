@@ -16,11 +16,11 @@ class Grafo {
 
         $(this._canvasVertices)
             .prop("width", 600)
-            .prop("height", 400);
+            .prop("height", 600);
 
         $(this._canvasArestas)
             .prop("width", 600)
-            .prop("height", 400);
+            .prop("height", 600);
 
         this._canvasVertices.onmousedown = (e) => {
             const { top, left } = $(this._canvasArestas).offset();
@@ -49,7 +49,7 @@ class Grafo {
     static criaGrafoMatriz(camada, vertices, tamanho) {
         //   const altura = parseInt($(`#${camada}`).prop('height'));
         //   const largura = parseInt($(`#${camada}`).prop('width'));
-        const altura = 400;
+        const altura = 600;
         const largura = 600;
         // Calcula de quanto será o espeçamento entre os vértices e suas margens com as bordas.
         const espacamentoX = (largura - (tamanho * raio)) / (tamanho + 2);
