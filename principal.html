@@ -113,8 +113,9 @@
           // Ativar vertices e arestas do caminho no grafo.
           // Fazer caçador percorrer o caminho.
           caminho = JSON.parse(caminho)
+          const posicoesCaminho = encontraPosicoesCaminho(caminho, parseInt($('#qnt-casas').val()));
           console.log('caminho', caminho);
-          console.log(Array.isArray(caminho));
+          console.log('posicoes caminho', posicoesCaminho);
           grafo.ativarCaminho(caminho);
         }
       });

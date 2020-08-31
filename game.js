@@ -93,6 +93,31 @@ function moveCacador(x, y) {
   posicaoCacador.y = y;
 }
 
+function encontraPosicoesCaminho(caminho, tamanho) {
+  const posicoes = [];
+  caminho.map(valor => {
+    valor = parseInt(valor);
+    let x;
+    let y;
+
+    for (let i = 1; i <= tamanho; i++) {
+      if (valor <= tamanho * i) {
+          x = i - 1;
+          break;
+      }
+    }
+
+    for (let j = tamanho * x; (tamanho * x) + tamanho; j++) {
+      if (valor == j) {
+          y = j;
+          break;
+      }
+    }
+    posicoes.push({ x: x, y: y });
+  });
+  return posicoes;
+}
+
 function seguirCaminho(caminho) {
   caminho.map(({ x, y }, i) => {
     setTimeout(() => {
