@@ -111,6 +111,7 @@ function encontraPosicoesCaminho(caminho, tamanho) {
     let x;
     let y;
 
+    // Encontra linha onde o vertice esta no tabuleiro.
     for (let i = 1; i <= tamanho; i++) {
       if (valor < tamanho * i) {
           x = i - 1;
@@ -118,6 +119,7 @@ function encontraPosicoesCaminho(caminho, tamanho) {
       }
     }
 
+    // Encontra coluna onde o vertice esta no tabuleiro.
     for (let j = tamanho * x; j <= (tamanho * x) + tamanho; j++) {
       if (valor == j) {
           y = (j - (tamanho * x));

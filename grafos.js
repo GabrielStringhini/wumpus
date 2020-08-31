@@ -217,6 +217,9 @@ class Grafo {
         let yFlecha = 0;
         let anguloFlecha = 0;
 
+        let xCusto = 0;
+        let yCusto = 0;
+
         // Se diferencaX for negativa signica que o destino está à esquerda do origem.
         // Se diferencaY for negativa significa que o destino está acima do origem.
 
@@ -232,7 +235,7 @@ class Grafo {
 
         /**
          * (saidaX, saidaY): ponto onde a aresta sai do vertice de origem.
-         * (chegadaX, chegadaY): ponto onde a aresta sai do vertice de chegada. 
+         * (chegadaX, chegadaY): ponto onde a aresta sai do vertice de chegada.
          */
         if (aresta.origem.x > aresta.destino.x) {
             if (aresta.origem.y > aresta.destino.y) {
@@ -244,6 +247,7 @@ class Grafo {
                 const angulo = Math.atan((chegadaY - saidaY) / (chegadaX - saidaX));
                 xFlecha = saidaX - (Math.cos(angulo) * (hipotenusa / 2));
                 yFlecha = saidaY - (Math.sin(angulo) * (hipotenusa / 2));
+                yCusto = -10;
                 this._ctxArestas.moveTo(saidaX, saidaY);
                 this._ctxArestas.lineTo(chegadaX, chegadaY);
                 anguloFlecha = -90 * Math.PI / 180 + anguloOrigemOriginal;
@@ -257,6 +261,7 @@ class Grafo {
                 xFlecha = saidaX - (Math.cos(angulo) * (hipotenusa / 2));
                 yFlecha = saidaY - (Math.sin(angulo) * (hipotenusa / 2));
                 anguloFlecha = -90 * Math.PI / 180 - anguloOrigemOriginal;
+                yCusto = -10;
                 this._ctxArestas.moveTo(saidaX, saidaY);
                 this._ctxArestas.lineTo(chegadaX, chegadaY);
             }
@@ -270,6 +275,7 @@ class Grafo {
                 const angulo = Math.atan((chegadaY - saidaY) / (chegadaX - saidaX));
                 xFlecha = saidaX + (Math.cos(angulo) * (hipotenusa / 2));
                 yFlecha = saidaY + (Math.sin(angulo) * (hipotenusa / 2));
+                xCusto = -10;
                 this._ctxArestas.moveTo(saidaX, saidaY);
                 this._ctxArestas.lineTo(chegadaX, chegadaY);
                 anguloFlecha = 90 * Math.PI / 180 - anguloOrigemOriginal;
@@ -282,6 +288,7 @@ class Grafo {
                 const angulo = Math.atan((chegadaY - saidaY) / (chegadaX - saidaX));
                 xFlecha = saidaX + (Math.cos(angulo) * (hipotenusa / 2));
                 yFlecha = saidaY + (Math.sin(angulo) * (hipotenusa / 2));
+                xCusto = -10;
                 this._ctxArestas.moveTo(saidaX, saidaY);
                 this._ctxArestas.lineTo(chegadaX, chegadaY);
                 anguloFlecha = 90 * Math.PI / 180 + anguloOrigemOriginal;
@@ -296,6 +303,20 @@ class Grafo {
             const flecha = { x: xFlecha, y: yFlecha, lado: 15, angulo: anguloFlecha, ativa: aresta.ativa };
             this.desenhaFlecha(flecha);
         }
+
+        if (aresta.custo && aresta.custo != 0) {
+            this._ctxArestas.beginPath();
+            this._ctxArestas.font = '12px Arial';
+            this._ctxArestas.fillText(aresta.custo, xFlecha + xCusto, yFlecha + yCusto);
+            this._ctxArestas.closePath();
+        }
+
+        // if (aresta.custo) {
+        //     this._ctxArestas.beginPath();
+        //     this._ctxArestas.font = '12px Arial';
+        //     this._ctxArestas.fillText(aresta.custo, xFlecha, yFlecha);
+        //     this._ctxArestas.closePath();
+        // }
 
         // Marca que a aresta já foi desenhada.
         this._grafo[aresta.origem.nome][aresta.destino.nome].map((a, i) => {
@@ -353,7 +374,7 @@ class Grafo {
 // grafo.adicionarAresta('A', 'C', 30, true);
 // grafo.adicionarAresta('B', 'D', 30, true, true);
 // grafo.adicionarAresta('A', 'D', 30, true, true);
-
+//
 // grafo.renderArestas();
 // grafo.ativarVertices(['A', 'B']);
 // console.log('grafo', grafo);
