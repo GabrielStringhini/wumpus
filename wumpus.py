@@ -12,13 +12,13 @@ CAVERNA = 'v'
 
 TAMANHO = 6
 
-print(f'{VAZIO}: vazio')
-print(f'{WUMPUS}: wupus')
-print(f'{CACADOR}: caçador')
-print(f'{OURO}: ouro')
-print(f'{BRISA}: brisa')
-print(f'{FEDOR}: fedor')
-print(f'{CAVERNA}: caverna')
+# print(f'{VAZIO}: vazio')
+# print(f'{WUMPUS}: wupus')
+# print(f'{CACADOR}: caçador')
+# print(f'{OURO}: ouro')
+# print(f'{BRISA}: brisa')
+# print(f'{FEDOR}: fedor')
+# print(f'{CAVERNA}: caverna')
 
 class Wumpus:
     def __init__(self, tamanho=TAMANHO, inicio=[]):
@@ -111,30 +111,94 @@ class Wumpus:
                     casas_com_wumpus.append((x, y))
         return casas_com_wumpus
 
+    def casas_sem_caverna(self):
+        """Retorna lista de casas que não tenham uma caverna nela."""
+        casas_sem_caverna = []
+        for x in range(self.tamanho):
+            for y in range(self.tamanho):
+                if CAVERNA not in self.tabuleiro[x][y]:
+                    casas_sem_caverna.append((x, y))
+        return casas_sem_caverna
+
+    def casas_sem_brisa(self):
+        """Retorna lista de casas que não tenham brisa nela."""
+        casas_sem_brisa = []
+        for x in range(self.tamanho):
+            for y in range(self.tamanho):
+                if BRISA not in self.tabuleiro[x][y]:
+                    casas_sem_brisa.append((x, y))
+        return casas_sem_brisa
+    
+    def casas_sem_fedor(self):
+        """Retorna lista de casas que não tenham fedor nela."""
+        casas_sem_fedor = []
+        for x in range(self.tamanho):
+            for y in range(self.tamanho):
+                if FEDOR not in self.tabuleiro[x][y]:
+                    casas_sem_fedor.append((x, y))
+        return casas_sem_fedor
+
     def inicializa_tabuleiro(self, cavernas, brisas, fedores, wumpus=1, ouros=1):
         """Posiciona o ambiente aleatoriamente, recebe a quantidade de cada componente."""
+        # casas_livres = self.casas_livres()
+        # # Coloca todas as cavernas no tabuleiro.
+        # for _ in range(cavernas):
+        #     x, y = casas_livres.pop(random.randint(0, len(casas_livres) - 1))
+        #     self.posiciona_caverna(x, y)
+        # # Coloca todas as brisas no tabuleiro.
+        # for _ in range(brisas):
+        #     x, y = casas_livres.pop(random.randint(0,len(casas_livres) - 1))
+        #     self.posiciona_brisa(x, y)
+        # # Coloca todos os wumpus no tabuleiro.
+        # for _ in range(wumpus):
+        #     x, y = casas_livres.pop(random.randint(0,len(casas_livres) - 1))
+        #     self.posiciona_wumpus(x, y)
+        # # Coloca todos os ouros no tabuleiro.
+        # for _ in range(ouros):
+        #     x, y = casas_livres.pop(random.randint(0, len(casas_livres) - 1))
+        #     self.posiciona_ouro(x, y)
+        # # Coloca todas os fedores sempre em casas próximas de algum wumpus.
+        # casas_com_wumpus = self.casas_com_wumpus()
+        # for x, y in casas_com_wumpus:
+        #     # Pega todas as casas ao redor da casa que tem o wumpus.
+        #     casas_proximas = []
+        #     if x > 0:
+        #         casas_proximas.append((x - 1, y))
+        #     if x < self.tamanho - 1:
+        #         casas_proximas.append((x + 1, y))
+        #     if y > 0:
+        #         casas_proximas.append((x, y - 1))
+        #     if y < self.tamanho - 1:
+        #         casas_proximas.append((x, y + 1))
+
+        # for _ in range(fedores):
+        #     x, y = casas_proximas.pop(random.randint(0, len(casas_proximas) - 1))
+        #     self.posiciona_fedor(x, y)
         casas_livres = self.casas_livres()
-        # Coloca todas as cavernas no tabuleiro.
-        for _ in range(cavernas):
-            x, y = casas_livres.pop(random.randint(0, len(casas_livres) - 1))
-            self.posiciona_caverna(x, y)
-        # Coloca todas as brisas no tabuleiro.
-        for _ in range(brisas):
-            x, y = casas_livres.pop(random.randint(0,len(casas_livres) - 1))
-            self.posiciona_brisa(x, y)
-        # Coloca todos os wumpus no tabuleiro.
-        for _ in range(wumpus):
-            x, y = casas_livres.pop(random.randint(0,len(casas_livres) - 1))
-            self.posiciona_wumpus(x, y)
-        # Coloca todos os ouros no tabuleiro.
+        casas_sem_caverna = self.casas_sem_caverna()
+        casas_sem_brisa = self.casas_sem_brisa()
+        casas_sem_fedor = self.casas_sem_fedor()
+
         for _ in range(ouros):
             x, y = casas_livres.pop(random.randint(0, len(casas_livres) - 1))
             self.posiciona_ouro(x, y)
-        # Coloca todas os fedores sempre em casas próximas de algum wumpus.
+
+        for _ in range(wumpus):
+            x, y = casas_livres.pop(random.randint(0,len(casas_livres) - 1))
+            self.posiciona_wumpus(x, y)
+
+        for _ in range(cavernas):
+            x, y = casas_sem_caverna.pop(random.randint(0, len(casas_sem_caverna) - 1))
+            self.posiciona_caverna(x, y)
+
+        for _ in range(brisas):
+            x, y = casas_sem_brisa.pop(random.randint(0,len(casas_sem_brisa) - 1))
+            self.posiciona_brisa(x, y)
+
         casas_com_wumpus = self.casas_com_wumpus()
+        casas_proximas = []
         for x, y in casas_com_wumpus:
             # Pega todas as casas ao redor da casa que tem o wumpus.
-            casas_proximas = []
             if x > 0:
                 casas_proximas.append((x - 1, y))
             if x < self.tamanho - 1:
@@ -145,8 +209,9 @@ class Wumpus:
                 casas_proximas.append((x, y + 1))
 
         for _ in range(fedores):
-            x, y = casas_proximas.pop(random.randint(0, len(casas_proximas) - 1))
-            self.posiciona_fedor(x, y)
+            if casas_proximas:
+                x, y = casas_proximas.pop(random.randint(0, len(casas_proximas) - 1))
+                self.posiciona_fedor(x, y)
 
 if __name__ == '__main__':
     wumpus2 = Wumpus.cria_de_lista([

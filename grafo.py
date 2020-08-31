@@ -1,7 +1,9 @@
 from collections import defaultdict
 
 class Grafo:
-    def __init__(self, vertices, arestas=[]):
+    def __init__(self, vertices, arestas=None):
+        if arestas is None:
+            arestas = []
         self.vertices = vertices
         self.arestas = arestas
         self._grafo = defaultdict(lambda: defaultdict(int))
@@ -98,6 +100,7 @@ class Grafo:
 
     def add_aresta(self, aresta):
         """Adiciona aresta no grafo."""
+        # print(f'adicionando aresta entre {aresta[0]} e {aresta[1]}')
         self.arestas.append(aresta)
         self.__configura_grafo()
     

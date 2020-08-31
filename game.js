@@ -1,7 +1,5 @@
 $(document).ready(() => {
-  console.log('game.js')
-
-  montaTabuleiro(4);
+  // montaTabuleiro(4);
   // preencheTabuleiro({
   //   cheiro: [{x: 1, y: 3}, {x: 3, y: 3}],
   //   cacador: [{x: 3, y: 0}],
@@ -29,6 +27,7 @@ $(document).ready(() => {
 });
 
 const posicaoCacador = { x: 0, y: 0 };
+const tamanho = 0;
 
 function montaTabuleiro(casas) {
   const tabuleiro = $('#tabuleiro');
@@ -81,6 +80,10 @@ function preencheTabuleiroArray(arrayPersonagens) {
       }
     });
   })
+}
+
+function limpaTabuleiro(tamanho) {
+  $(`#tabuleiro`).empty();
 }
 
 function moveCacador(x, y) {
