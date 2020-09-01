@@ -40,6 +40,7 @@ function montaTabuleiro(casas) {
   }
 }
 
+// Coloca o personagem em uma nova casa.
 function colocaPersonagem(classe, x, y) {
   const personagensMesmaCasa = $(`#tabuleiro .casa-${x}-${y} div`);
   const personagem = $(`<div class='personagem ${classe}'></div>`);
@@ -48,6 +49,16 @@ function colocaPersonagem(classe, x, y) {
     .children()
     .css('height', `${100 / (personagensMesmaCasa.length + 1)}%`)
     .css('width', `${100 / (personagensMesmaCasa.length + 1)}%`)
+}
+
+// Remove personagem da posição onde ele está.
+function removePersonagem(classe, x, y) {
+  $(`#tabuleiro .casa-${x}-${y} .personagem.${classe}`).remove();
+  const personagensMesmaCasa = $(`#tabuleiro .casa-${x}-${y} div`);
+  $(`#tabuleiro .casa-${x}-${y}`)
+    .children()
+    .css('height', `${100 / (personagensMesmaCasa.length)}%`)
+    .css('width', `${100 / (personagensMesmaCasa.length)}%`)
 }
 
 function preencheTabuleiro(personagens) {
@@ -87,10 +98,37 @@ function limpaTabuleiro(tamanho) {
 }
 
 function moveCacador(x, y) {
-  $('.personagem.cacador').remove();
-  $(`#tabuleiro .casa-${x}-${y}`).append(`<div class='personagem cacador' height='100%' width='100%'></div>`);
+  removePersonagem('cacador', posicaoCacador.x, posicaoCacador.y);
+  colocaPersonagem('cacador', x, y);
   posicaoCacador.x = x;
   posicaoCacador.y = y;
+}
+
+function encontraPosicoesCaminho(caminho, tamanho) {
+  const posicoes = [];
+  caminho.map(valor => {
+    valor = parseInt(valor);
+    let x;
+    let y;
+
+    // Encontra linha onde o vertice esta no tabuleiro.
+    for (let i = 1; i <= tamanho; i++) {
+      if (valor < tamanho * i) {
+          x = i - 1;
+          break;
+      }
+    }
+
+    // Encontra coluna onde o vertice esta no tabuleiro.
+    for (let j = tamanho * x; j <= (tamanho * x) + tamanho; j++) {
+      if (valor == j) {
+          y = (j - (tamanho * x));
+          break;
+      }
+    }
+    posicoes.push({ x: x, y: y });
+  });
+  return posicoes;
 }
 
 function seguirCaminho(caminho) {
