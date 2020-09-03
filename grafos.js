@@ -181,11 +181,14 @@ class Grafo {
         });
     }
 
-    renderVertice(vertice) {
+    renderVertice(vertice, opcoes) {
         this._ctxVertices.beginPath();
         this._ctxVertices.save();
         this._ctxVertices.lineWidth = 2;
-        this._ctxVertices.strokeStyle = vertice.ativo ? corAtivo : cor;
+        this._ctxVertices.strokeStyle = cor;
+        if (vertice.ativo) this._ctxVertices.strokeStyle = corAtivo;
+        if (vertice.ativo && opcoes?.corAtivo) this._ctxVertices.strokeStyle = opcoes.corAtivo;
+        // this._ctxVertices.strokeStyle = vertice.ativo ? corAtivo : cor;
         this._ctxVertices.font = `${vertice.raio ? vertice.raio - 10 : raio - 10}px Arial`;
         this._ctxVertices.fillStyle = vertice.ativo ? corAtivo : cor;
         this._ctxVertices.arc(vertice.x, vertice.y, vertice.raio ?? raio, 0, Math.PI * 2, false);
@@ -195,10 +198,12 @@ class Grafo {
         this._ctxVertices.closePath();
     }
 
-    renderAresta(aresta) {
+    renderAresta(aresta, opcoes) {
         this._ctxArestas.beginPath();
         this._ctxArestas.save();
         this._ctxArestas.strokeStyle = aresta.ativa ? corAtivo : cor;
+        if (aresta.ativa) this._ctxArestas.strokeStyle = corAtivo
+        if (aresta.ativa && aresta?.opcoes?.corAtivo) this._ctxArestas.strokeStyle = aresta.opcoes.corAtivo;
         // Quantidade de arestas entre os dois vertices;
         const { quantidade, desenhadas } = this.arestasEntre(aresta.origem.nome, aresta.destino.nome);
 
@@ -304,17 +309,10 @@ class Grafo {
             this.desenhaFlecha(flecha);
         }
 
-        if (aresta.custo && aresta.custo != 0) {
-            this._ctxArestas.beginPath();
-            this._ctxArestas.font = '12px Arial';
-            this._ctxArestas.fillText(aresta.custo, xFlecha + xCusto, yFlecha + yCusto);
-            this._ctxArestas.closePath();
-        }
-
-        // if (aresta.custo) {
+        // if (aresta.custo && aresta.custo != 0) {
         //     this._ctxArestas.beginPath();
         //     this._ctxArestas.font = '12px Arial';
-        //     this._ctxArestas.fillText(aresta.custo, xFlecha, yFlecha);
+        //     this._ctxArestas.fillText(aresta.custo, xFlecha + xCusto, yFlecha + yCusto);
         //     this._ctxArestas.closePath();
         // }
 
