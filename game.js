@@ -135,6 +135,6 @@ function seguirCaminho(caminho) {
   caminho.map(({ x, y }, i) => {
     setTimeout(() => {
       moveCacador(x, y);
-    }, i * 500);
+    }, i * 300);
   });
 }

@@ -83,15 +83,15 @@ class Grafo {
         return { quantidade, desenhadas };
     }
 
-    adicionarVertice(vertice) {
-        this._vertices[vertice.nome] = { ...vertice, ativo: false };
+    adicionarVertice(vertice, opcoes={}) {
+        this._vertices[vertice.nome] = { ...vertice, ativo: false, opcoes };
         this._grafo[vertice.nome] = {};
     }
 
-    adicionarAresta(origem, destino, custo, direcionada, ativa) {
+    adicionarAresta(origem, destino, custo, direcionada, ativa, opcoes={}) {
         if (!this._grafo[origem][destino]) this._grafo[origem][destino] = [];
         this._quantidadeArestas++;
-        this._grafo[origem][destino].push({ id: this._quantidadeArestas, custo: custo, direcionada: direcionada, desenhada: false, ativa: ativa ?? false });
+        this._grafo[origem][destino].push({ id: this._quantidadeArestas, custo: custo, direcionada: direcionada, desenhada: false, ativa: ativa ?? false, opcoes: opcoes });
     }
 
     vertice(id, atributo, valor) {
@@ -127,14 +127,15 @@ class Grafo {
         return angulos;
     }
 
-    renderVertices() {
+    renderVertices(opcoes) {
         Object.entries(this._vertices).map(([id, vertice]) => {
-            this.renderVertice(vertice);
+            this.renderVertice(vertice, opcoes);
         });
     }
 
-    ativarVertice(vertice) {
+    ativarVertice(vertice, cor) {
         this._vertices[vertice].ativo = true;
+        this._vertices[vertice].opcoes.corAtivo = cor;
     }
 
     ativarVertices(vertices) {
@@ -145,15 +146,16 @@ class Grafo {
         this.renderVertices();
     }
 
-    ativarCaminho(caminho) {
+    ativarCaminho(caminho, cor) {
         this.limparVertices();
         this.limparArestas();
         caminho.map((vertice, i) => {
-            this.ativarVertice(vertice);
+            this.ativarVertice(vertice, cor);
             if (i < caminho.length - 1) {
                 const proximo = caminho[i+1];
                 for (let i = 0; i < this._grafo[vertice][proximo].length; i++) {
                     this._grafo[vertice][proximo][i].ativa = true;
+                    this._grafo[vertice][proximo][i].opcoes.corAtiva = cor
                 }
             }
         });
@@ -161,7 +163,7 @@ class Grafo {
         this.renderArestas();
     }
 
-    renderArestas() {
+    renderArestas(opcoes) {
         Object.keys(this._vertices).map(nomeOrigem => {
             const origem = this._grafo[nomeOrigem];
             Object.keys(origem).map(nomeDestino => {
@@ -172,10 +174,11 @@ class Grafo {
                         ativa: aresta.ativa,
                         desenhada: aresta.desenhada,
                         direcionada: true,
+                        opcoes: aresta.opcoes,
                         origem: this._vertices[nomeOrigem],
                         destino: this._vertices[nomeDestino]
                     };
-                    this.renderAresta(a);
+                    this.renderAresta(a, opcoes);
                 });
             });
         });
@@ -202,8 +205,10 @@ class Grafo {
         this._ctxArestas.beginPath();
         this._ctxArestas.save();
         this._ctxArestas.strokeStyle = aresta.ativa ? corAtivo : cor;
-        if (aresta.ativa) this._ctxArestas.strokeStyle = corAtivo
-        if (aresta.ativa && aresta?.opcoes?.corAtivo) this._ctxArestas.strokeStyle = aresta.opcoes.corAtivo;
+        if (aresta.ativa) 
+            this._ctxArestas.strokeStyle = corAtivo
+        if (aresta.ativa && aresta?.opcoes?.corAtiva)
+            this._ctxArestas.strokeStyle = aresta.opcoes.corAtiva;
         // Quantidade de arestas entre os dois vertices;
         const { quantidade, desenhadas } = this.arestasEntre(aresta.origem.nome, aresta.destino.nome);
 
@@ -306,7 +311,7 @@ class Grafo {
 
         if (aresta.direcionada) {
             const flecha = { x: xFlecha, y: yFlecha, lado: 15, angulo: anguloFlecha, ativa: aresta.ativa };
-            this.desenhaFlecha(flecha);
+            this.desenhaFlecha(flecha, aresta.opcoes??{});
         }
 
         // if (aresta.custo && aresta.custo != 0) {
@@ -322,11 +327,13 @@ class Grafo {
         });
     }
 
-    desenhaFlecha(flecha) {
+    desenhaFlecha(flecha, opcoes) {
         const altura = flecha.lado * Math.sqrt(3) / 2;
         this._ctxArestas.beginPath();
         this._ctxArestas.save();
-        this._ctxArestas.fillStyle = flecha.ativa ? corAtivo : cor;
+        this._ctxArestas.fillStyle = cor;
+        if (flecha.ativa) this._ctxArestas.fillStyle = corAtivo;
+        if (flecha.ativa && opcoes?.corAtiva) this._ctxArestas.fillStyle = opcoes.corAtiva;
         this._ctxArestas.translate(flecha.x, flecha.y);
         this._ctxArestas.rotate(flecha.angulo);
         this._ctxArestas.translate(-flecha.x, -flecha.y);

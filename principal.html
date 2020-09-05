@@ -107,18 +107,23 @@
 
     });
     $('#btn-solucionar').on('click', () => {
+      const caminho = [];
       $.ajax({
-        url: 'http://localhost:5000/solucionar',
-        success: caminho => {
-          // Ativar vertices e arestas do caminho no grafo.
-          // Fazer caçador percorrer o caminho.
-          caminho = JSON.parse(caminho)
-          const posicoesCaminho = encontraPosicoesCaminho(caminho, parseInt($('#qnt-casas').val()));
-          console.log('posicoes caminho', posicoesCaminho);
-          grafo.ativarCaminho(caminho);
-          // moveCacador(0, 1);
-          // moveCacador(0, 2);
-          seguirCaminho(posicoesCaminho);
+        url: 'http://localhost:5000/solucionar?tipo=ida',
+        success: caminhoIda => {
+          caminhoIda = JSON.parse(caminhoIda);
+          grafo.ativarCaminho(caminhoIda, '#FF0000');
+          caminho.push(...caminhoIda);
+          $.ajax({
+            url: 'http://localhost:5000/solucionar?tipo=volta',
+            success: caminhoVolta => {
+              caminhoVolta = JSON.parse(caminhoVolta);
+              grafo.ativarCaminho(caminhoVolta, '#3498eb');
+              caminho.push(...caminhoVolta);
+              const posicoesCaminho = encontraPosicoesCaminho(caminho, parseInt($('#qnt-casas').val()));
+              seguirCaminho(posicoesCaminho);
+            }
+          });
         }
       });
     });

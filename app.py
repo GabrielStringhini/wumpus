@@ -51,8 +51,13 @@ def criar_grafo():
 @app.route('/solucionar')
 @cross_origin()
 def solucionar():
-    incio = GAME.posicao_cacador
-    fim = GAME.posicao_ouro
-    sol = solucao.Solucao()
-    caminho = GRAFO._menor_custo(VERTICE_CACADOR, VERTICE_OURO)
+    tipo = request.args.get('tipo')
+    print('tipo', tipo)
+    if tipo == 'ida':
+        caminho = GRAFO._menor_custo(VERTICE_CACADOR, VERTICE_OURO)
+    elif tipo == 'volta':
+        caminho = GRAFO._menor_custo(VERTICE_OURO, VERTICE_CACADOR)
+    # incio = GAME.posicao_cacador
+    # fim = GAME.posicao_ouro
+    # sol = solucao.Solucao()
     return json.dumps(caminho)
