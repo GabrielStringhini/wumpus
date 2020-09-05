@@ -27,9 +27,12 @@ $(document).ready(() => {
 });
 
 const posicaoCacador = { x: 0, y: 0 };
+const posicaoOuro = { x: 0, y: 0 };
 const tamanho = 0;
+let classeCacador = 'cacador';
 
 function montaTabuleiro(casas) {
+  classeCacador = 'cacador';
   const tabuleiro = $('#tabuleiro');
   for (let x = 0; x < casas; x++) {
     const linha = $('<tr/>').appendTo(tabuleiro);
@@ -78,8 +81,10 @@ function preencheTabuleiroArray(arrayPersonagens) {
           case personagem[i].includes('w'): colocaPersonagem('wumpus', x, y);
             break;
           case personagem[i].includes('g'): colocaPersonagem('ouro', x, y);
+            posicaoOuro.x = x;
+            posicaoOuro.y = y;
             break;
-          case personagem[i].includes('c'): colocaPersonagem('cacador', x, y);
+          case personagem[i].includes('c'): colocaPersonagem(classeCacador, x, y);
             break;
           case personagem[i].includes('v'): colocaPersonagem('caverna', x, y);
             break;
@@ -98,8 +103,14 @@ function limpaTabuleiro(tamanho) {
 }
 
 function moveCacador(x, y) {
-  removePersonagem('cacador', posicaoCacador.x, posicaoCacador.y);
-  colocaPersonagem('cacador', x, y);
+  removePersonagem(classeCacador, posicaoCacador.x, posicaoCacador.y);
+  colocaPersonagem(classeCacador, x, y);
+  if (x == posicaoOuro.x && y == posicaoOuro.y) {
+    removePersonagem('ouro', posicaoOuro.x, posicaoOuro.y);
+    removePersonagem(classeCacador, x, y);
+    classeCacador = 'cacador-com-ouro';
+    colocaPersonagem(classeCacador, x, y);
+  }
   posicaoCacador.x = x;
   posicaoCacador.y = y;
 }

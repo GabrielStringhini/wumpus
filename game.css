@@ -12,6 +12,10 @@
   background-image: url('icones/warrior.svg');
 }
 
+.cacador-com-ouro {
+  background-image: url('icones/warrior-with-gold.svg');
+}
+
 .wumpus {
   background-image: url('./icones/monster.svg');
 }
