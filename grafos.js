@@ -212,6 +212,7 @@ class Grafo {
         // Quantidade de arestas entre os dois vertices;
         const { quantidade, desenhadas } = this.arestasEntre(aresta.origem.nome, aresta.destino.nome);
 
+        // Aqui não pode ser mais a diferença absoluta.
         const diferencaX = Math.abs(aresta.destino.x - aresta.origem.x);
         const diferencaY = Math.abs(aresta.destino.y - aresta.origem.y);
         const anguloOrigemOriginal = Math.atan(diferencaY / diferencaX);
@@ -238,6 +239,7 @@ class Grafo {
             y: Math.sin(anguloOrigem) * (aresta.origem.raio ?? raio)
         };
 
+        // Aqui o seno e o cosseno devem ser negativos.
         const destino = {
             x: Math.sin(anguloDestino) * (aresta.destino.raio ?? raio),
             y: Math.cos(anguloDestino) * (aresta.destino.raio ?? raio)
