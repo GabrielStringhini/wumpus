@@ -188,12 +188,12 @@ class Grafo {
         this._ctxVertices.beginPath();
         this._ctxVertices.save();
         this._ctxVertices.lineWidth = 2;
-        this._ctxVertices.strokeStyle = cor;
-        if (vertice.ativo) this._ctxVertices.strokeStyle = corAtivo;
-        if (vertice.ativo && opcoes?.corAtivo) this._ctxVertices.strokeStyle = opcoes.corAtivo;
+        // this._ctxVertices.strokeStyle = cor;
+        // if (vertice.ativo) this._ctxVertices.strokeStyle = corAtivo;
+        // if (vertice.ativo && opcoes?.corAtivo) this._ctxVertices.strokeStyle = opcoes.corAtivo;
         // this._ctxVertices.strokeStyle = vertice.ativo ? corAtivo : cor;
         this._ctxVertices.font = `${vertice.raio ? vertice.raio - 10 : raio - 10}px Arial`;
-        this._ctxVertices.fillStyle = vertice.ativo ? corAtivo : cor;
+        // this._ctxVertices.fillStyle = vertice.ativo ? corAtivo : cor;
         this._ctxVertices.arc(vertice.x, vertice.y, vertice.raio ?? raio, 0, Math.PI * 2, false);
         this._ctxVertices.stroke();
         this._ctxVertices.fillText(vertice.nome, vertice.x - 10, vertice.y + 10);

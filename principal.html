@@ -113,17 +113,21 @@
         success: caminhoIda => {
           caminhoIda = JSON.parse(caminhoIda);
           grafo.ativarCaminho(caminhoIda, '#FF0000');
-          caminho.push(...caminhoIda);
-          $.ajax({
-            url: 'http://localhost:5000/solucionar?tipo=volta',
-            success: caminhoVolta => {
-              caminhoVolta = JSON.parse(caminhoVolta);
-              grafo.ativarCaminho(caminhoVolta, '#3498eb');
-              caminho.push(...caminhoVolta);
-              const posicoesCaminho = encontraPosicoesCaminho(caminho, parseInt($('#qnt-casas').val()));
-              seguirCaminho(posicoesCaminho);
-            }
-          });
+          const posicoesCaminho = encontraPosicoesCaminho(caminhoIda, parseInt($('#qnt-casas').val()));
+          seguirCaminho(posicoesCaminho);
+
+          // Gambiarra pra só fazer o request do caminho de volta depois que percorrer o caminho de ida.
+          setTimeout(() => {
+            $.ajax({
+              url: 'http://localhost:5000/solucionar?tipo=volta',
+              success: caminhoVolta => {
+                caminhoVolta = JSON.parse(caminhoVolta);
+                grafo.ativarCaminho(caminhoVolta, '#3498eb');
+                const posicoesCaminho = encontraPosicoesCaminho(caminhoVolta, parseInt($('#qnt-casas').val()));
+                seguirCaminho(posicoesCaminho);
+              }
+            });
+          }, caminhoIda.length * 300);
         }
       });
     });

@@ -85,6 +85,14 @@ class Wumpus:
         self.tabuleiro[x][y] = self.tabuleiro[x][y].replace(VAZIO, '') + FEDOR
         self.quantidade_fedor += 1
 
+    def remove_personagem(self, personagem, x, y):
+        """Remove personagem de uma casa específica."""
+        personagens_na_casa = self.tabuleiro[x][y]
+        if personagens_na_casa == personagem:
+            self.tabuleiro[x][y] = VAZIO
+        else:
+            self.tabuleiro[x][y] = self.tabuleiro[x][y].replace(personagem, '', 1)
+
     def casa(self, x, y):
         """Retorna o que está na casa na posição especificada."""
         return self.tabuleiro[x][y]

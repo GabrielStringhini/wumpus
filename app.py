@@ -15,6 +15,7 @@ app.secret_key = 'chave-secreta'
 
 GAME = None
 GRAFO = None
+SOLUCAO = None
 VERTICE_CACADOR = None
 VERTICE_OURO = None
 
@@ -42,22 +43,35 @@ def criar_grafo():
     global GRAFO
     global VERTICE_CACADOR
     global VERTICE_OURO
+    global SOLUCAO
     sol = solucao.Solucao()
     GRAFO = copy.deepcopy(sol.tabuleiro_para_grafo(GAME))
     VERTICE_CACADOR = sol.vertice_cacador
     VERTICE_OURO = sol.vertice_ouro
+    SOLUCAO = sol
     return json.dumps(GRAFO._grafo)
 
 @app.route('/solucionar')
 @cross_origin()
 def solucionar():
     tipo = request.args.get('tipo')
-    print('tipo', tipo)
     if tipo == 'ida':
         caminho = GRAFO._menor_custo(VERTICE_CACADOR, VERTICE_OURO)
     elif tipo == 'volta':
         caminho = GRAFO._menor_custo(VERTICE_OURO, VERTICE_CACADOR)
-    # incio = GAME.posicao_cacador
-    # fim = GAME.posicao_ouro
-    # sol = solucao.Solucao()
     return json.dumps(caminho)
+
+@app.route('/matar-wumpus')
+@cross_origin()
+def matar_wumpus():
+    global GRAFO
+    x = int(request.args.get('x'))
+    y = int(request.args.get('y'))
+    # print('tabuleiro antes de matar wumpus')
+    # print(GAME)
+    # print('===============')
+    GAME.remove_personagem(wumpus_game.WUMPUS, x, y)
+    GRAFO = SOLUCAO.tabuleiro_para_grafo(GAME)
+    # print('tabuleiro depois de matar wumpus')
+    # print(GAME)
+    return 'deu boa'

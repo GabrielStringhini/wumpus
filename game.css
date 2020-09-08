@@ -16,6 +16,14 @@
   background-image: url('icones/warrior-with-gold.svg');
 }
 
+.cacador-sem-flecha {
+  background-image: url('icones/warrior-no-arrow.svg');
+}
+
+.cacador-com-ouro-sem-flecha {
+  background-image: url('icones/warrior-with-gold-no-arrow.svg');
+}
+
 .wumpus {
   background-image: url('./icones/monster.svg');
 }

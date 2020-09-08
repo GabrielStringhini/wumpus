@@ -56,26 +56,6 @@ class Solucao:
             custo = 0
 
         return custo
-        # custo = 1
-        # # Caso estiver indo para uma casa com wumpus.
-        # if casa2 == wumpus.WUMPUS:
-        #     custo = 10
-
-        # # Caso estiver indo para uma casa com fedor.
-        # if casa2 == wumpus.FEDOR:
-        #     custo = 8
-        #     if casa1 == wumpus.WUMPUS:
-        #         custo = 2
-
-        # # Caso estiver indo para uma casa com ouro.
-        # if casa2 == wumpus.OURO:
-        #     custo = 0
-
-        # # Caso estiver indo de casa com ouro para casa vazia ou com brisa ou com caverna.
-        # if casa1 == wumpus.OURO and casa2 in ([wumpus.VAZIO, wumpus.BRISA, wumpus.CAVERNA]):
-        #     custo = 5
-
-        # return custo
 
 if __name__ == '__main__':
     solucao = Solucao()
@@ -86,7 +66,7 @@ if __name__ == '__main__':
         ['c', 'o', 'o', 'f', 'o'],
         ['o', 'o', 'o', 'o', 'o'],
     ], 5)
-    print(w)
+    w.remove_personagem(wumpus.WUMPUS, 2, 3)
     g = solucao.tabuleiro_para_grafo(w)
-    print(g._grafo)
+    # print(g._grafo)
     # print(g._menor_custo(1, 10))

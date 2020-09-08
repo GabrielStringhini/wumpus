@@ -30,9 +30,11 @@ const posicaoCacador = { x: 0, y: 0 };
 const posicaoOuro = { x: 0, y: 0 };
 const tamanho = 0;
 let classeCacador = 'cacador';
+let possuiFlecha = true;
 
 function montaTabuleiro(casas) {
   classeCacador = 'cacador';
+  possuiFlecha = true;
   const tabuleiro = $('#tabuleiro');
   for (let x = 0; x < casas; x++) {
     const linha = $('<tr/>').appendTo(tabuleiro);
@@ -108,11 +110,37 @@ function moveCacador(x, y) {
   if (x == posicaoOuro.x && y == posicaoOuro.y) {
     removePersonagem('ouro', posicaoOuro.x, posicaoOuro.y);
     removePersonagem(classeCacador, x, y);
-    classeCacador = 'cacador-com-ouro';
+    if (possuiFlecha)
+      classeCacador = 'cacador-com-ouro';
+    else 
+      classeCacador = 'cacador-com-ouro-sem-flecha';
     colocaPersonagem(classeCacador, x, y);
+  }
+  const casaComWumpus = personagemNaCasa('wumpus', x, y);
+  if (casaComWumpus) {
+    // Se está em uma casa que tem wumpus, mas o caçador ainda tem uma flecha, ele pode matar o wumpus;
+    if (possuiFlecha) {
+      removePersonagem('wumpus', x, y);
+      removePersonagem(classeCacador, x, y);
+      possuiFlecha = false;
+      classeCacador = 'cacador-sem-flecha';
+      colocaPersonagem(classeCacador, x, y);
+      // Requisita para o backend indicando que o matou um wumpus.
+      $.ajax({
+        url: `http://localhost:5000/matar-wumpus?x=${x}&y=${y}`,
+        async: false,
+        success: () => {
+          console.log('matou wumpus');
+        }
+      });
+    }
   }
   posicaoCacador.x = x;
   posicaoCacador.y = y;
+}
+
+function personagemNaCasa(personagem, x, y) {
+  return $(`#tabuleiro .casa-${x}-${y} > .${personagem}`).length > 0;
 }
 
 function encontraPosicoesCaminho(caminho, tamanho) {
